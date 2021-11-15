@@ -10,7 +10,7 @@ contract Casino is ICasino, Ownable {
     IRNG internal randomGenerator;
 
     // epoch => randomSeed
-    mapping(uint256 => uint256) randomSeeds;
+    mapping(uint256 => uint256) public randomSeeds;
     bytes32 internal requestId;
 
     event ResponseReceived(uint256 epoch, bytes32 requestId, uint256 response);
@@ -29,8 +29,8 @@ contract Casino is ICasino, Ownable {
      * @dev Should be called by gelato to request a random number to the next game epoch.
      * @param _epoch epoch the random number is for
      */
-    // TODO: change onlyOwner to something that allows only calls from gelato
-    function requestRandomNumber(uint256 _epoch) external onlyOwner {
+    // TODO: use a modifier so that it accepts calls from gelato only
+    function requestRandomNumber(uint256 _epoch) external {
         requestId = randomGenerator.getRandomNumber(_epoch);
         // Emits that random number has been requested
         emit RandomNumberRequest(_epoch, requestId);

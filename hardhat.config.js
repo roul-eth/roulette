@@ -38,8 +38,8 @@ module.exports = {
     coinmarketcap: `${process.env.COINMARKETCAP_KEY}`
   },
   networks: {
-    rinkeby: {
-      url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_KEY}`,
+    kovan: {
+      url: `https://eth-kovan.alchemyapi.io/v2/${process.env.ALCHEMY_KEY}`,
       accounts: [`${process.env.DEPLOYER_PK}`],
     },
   },
