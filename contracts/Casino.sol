@@ -4,12 +4,17 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 import "../interfaces/ICasino.sol";
+import "../interfaces/IRNG.sol";
 
-contract Casino is ICasino {
-    address randomGenerator;
+contract Casino is ICasino, Ownable {
+    IRNG internal randomGenerator;
+
+    // epoch => randomSeed
     mapping(uint256 => uint256) randomSeeds;
+    bytes32 internal requestId;
 
     event ResponseReceived(uint256 epoch, bytes32 requestId, uint256 response);
+    event RandomNumberRequest(uint256 lotteryId, bytes32 requestId);
 
     modifier onlyRNG() {
         require(msg.sender == address(randomGenerator), "Only RNG address");
@@ -17,13 +22,23 @@ contract Casino is ICasino {
     }
 
     constructor(address _rng) {
-        randomGenerator = _rng;
+        randomGenerator = IRNG(_rng);
+    }
+
+    /**
+     * @dev Should be called by gelato to request a random number to the next game epoch.
+     * @param _epoch epoch the random number is for
+     */
+    // TODO: change onlyOwner to something that allows only calls from gelato
+    function requestRandomNumber(uint256 _epoch) external onlyOwner {
+        requestId = randomGenerator.getRandomNumber(_epoch);
+        // Emits that random number has been requested
+        emit RandomNumberRequest(_epoch, requestId);
     }
 
     /**
      * @notice Callback function called by the RNG contract after receiving the chainlink response.
-     * Will use the received random number to assign prizes to random participants.
-     * @param _epoch ID of the lottery the random number is for
+     * @param _epoch epoch the random number is for
      * @param _requestId ID of the request that was sent to the RNG contract
      * @param _randomNumber Random number provided by the VRF chainlink oracle
      */

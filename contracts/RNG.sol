@@ -34,10 +34,6 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase {
         emit casinoAddressChanged(oldAddr, _casinoAddr);
     }
 
-    function getCasinoAddress() public view returns (address) {
-        return casinoAddr;
-    }
-
     /**
      * Requests randomness
      */
