@@ -26,28 +26,28 @@ contract Casino is ICasino, Ownable {
     }
 
     /**
-     * @dev Should be called by gelato to request a random number to the next game epoch.
-     * @param _epoch epoch the random number is for
+     * @dev Should be called by gelato to request a random number to the next game round.
+     * @param _round game round the random number is for
      */
     // TODO: use a modifier so that it accepts calls from gelato only
-    function requestRandomNumber(uint256 _epoch) external {
-        requestId = randomGenerator.getRandomNumber(_epoch);
+    function requestRandomNumber(uint256 _round) external {
+        requestId = randomGenerator.getRandomNumber(_round);
         // Emits that random number has been requested
-        emit RandomNumberRequest(_epoch, requestId);
+        emit RandomNumberRequest(_round, requestId);
     }
 
     /**
      * @notice Callback function called by the RNG contract after receiving the chainlink response.
-     * @param _epoch epoch the random number is for
+     * @param _round game round the random number is for
      * @param _requestId ID of the request that was sent to the RNG contract
      * @param _randomNumber Random number provided by the VRF chainlink oracle
      */
     function updateRandomNumber(
-        uint256 _epoch,
+        uint256 _round,
         bytes32 _requestId,
         uint256 _randomNumber
     ) external onlyRNG {
-        randomSeeds[_epoch] = _randomNumber;
-        emit ResponseReceived(_epoch, _requestId, _randomNumber);
+        randomSeeds[_round] = _randomNumber;
+        emit ResponseReceived(_round, _requestId, _randomNumber);
     }
 }

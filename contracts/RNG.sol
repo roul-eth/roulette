@@ -9,7 +9,7 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase {
     bytes32 internal keyHash;
     uint256 internal fee;
     address public casinoAddr;
-    uint256 currentEpoch;
+    uint256 currentRound;
 
     event casinoAddressChanged(address oldAddr, address newAddr);
     modifier onlyCasino() {
@@ -37,7 +37,7 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase {
     /**
      * Requests randomness
      */
-    function getRandomNumber(uint256 epoch)
+    function getRandomNumber(uint256 round)
         public
         onlyCasino
         returns (bytes32 requestId)
@@ -46,7 +46,7 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase {
             LINK.balanceOf(address(this)) >= fee,
             "Not enough LINK - fill contract"
         );
-        currentEpoch = epoch;
+        currentRound = round;
         return requestRandomness(keyHash, fee);
     }
 
@@ -58,7 +58,7 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase {
         override
     {
         ICasino(casinoAddr).updateRandomNumber(
-            currentEpoch,
+            currentRound,
             requestId,
             randomness
         );
