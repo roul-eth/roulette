@@ -1,7 +1,7 @@
 CONTRACTS = {
-    "kovan": {
-        "randomnessAddress": "0x434496592Ea0E202954035F703F244256E1019B7",
-        "casinoAddress": "0x32185feF1Ec11cB79298595fc6dF1398808Cb4E6",
+    "rinkeby": {
+        "randomnessAddress": "0x030DB5b4FF9D532eaf74d1A4f3fC619E1a456847",
+        "casinoAddress": "0x36CC99966A8E576FC002c9D4D5f259338ce26040",
     },
 }
 

@@ -14,7 +14,7 @@ contract Casino is ICasino, Ownable {
     bytes32 internal requestId;
 
     event ResponseReceived(uint256 round, bytes32 requestId, uint256 response);
-    event RandomNumberRequest(uint256 lotteryId, bytes32 requestId);
+    event RandomNumberRequest(uint256 round, bytes32 requestId);
 
     modifier onlyRNG() {
         require(msg.sender == address(randomGenerator), "Only RNG address");
