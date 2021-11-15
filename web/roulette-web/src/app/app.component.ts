@@ -1,4 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from "@angular/core";
+import { Web3Service } from "./web3.service";
+
 
 @Component({
   selector: "app-root",
@@ -31,11 +33,15 @@ export class AppComponent implements OnInit {
   blurWheel = false;
   wheelImg;
 
-  constructor(private rd: Renderer2){}
+  constructor(private rd: Renderer2, private web3: Web3Service){}
 
   ngOnInit() {
     // $(".wheel img").css("transform", "rotate(" + this.perfecthalf + "deg)");
     this.wheelImg = this.wheel.nativeElement;
+  }
+
+  public metamaskConnect(){
+    this.web3.connectToMetaMask();
   }
 
   public getRandomInt(min, max) {

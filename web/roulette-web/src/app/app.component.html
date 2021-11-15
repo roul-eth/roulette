@@ -1,4 +1,6 @@
-<!-- originally from https://codepen.io/daniandl/pen/mMQmGV -->
+<div class="header">
+  <button (click)="metamaskConnect()"> Connect to MetaMask</button>
+</div>
 
 <div class="roulette" (click)="wheelSpin()">
   <div class="wheel spin" [ngClass]="{'wheelBlur': blurWheel, 'noWheelBlur': !blurWheel}">
