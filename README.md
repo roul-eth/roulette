@@ -19,3 +19,12 @@ It will check the address for each contract on the contracts.js file. If it is n
 
 The script will automatically publish/verify the contract code using the etherscan plugin.
 
+
+# Angular 6 Frontend:
+
+  # Setup:
+    npm install  - 
+    
+   # Angular Specific commands:
+    ng build - 
+    ng serve  - to run web server. 
