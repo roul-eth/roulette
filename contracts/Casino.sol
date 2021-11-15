@@ -9,11 +9,11 @@ import "../interfaces/IRNG.sol";
 contract Casino is ICasino, Ownable {
     IRNG internal randomGenerator;
 
-    // epoch => randomSeed
+    // round => randomSeed
     mapping(uint256 => uint256) public randomSeeds;
     bytes32 internal requestId;
 
-    event ResponseReceived(uint256 epoch, bytes32 requestId, uint256 response);
+    event ResponseReceived(uint256 round, bytes32 requestId, uint256 response);
     event RandomNumberRequest(uint256 lotteryId, bytes32 requestId);
 
     modifier onlyRNG() {
