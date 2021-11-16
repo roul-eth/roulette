@@ -1,15 +1,22 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from "@angular/core";
 import { Web3Service } from "./web3.service";
 
-
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.less"],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnInit {
+  
+  wheel: any;
   // DOm Manipulate wheel spin
-  @ViewChild('wheel') wheel: ElementRef;
+  @ViewChild('wheel')
+  set wheelRef(v: ElementRef) {
+    setTimeout(()=>{
+      this.wheel = v.nativeElement;
+      this.wheelImg = v.nativeElement;
+    })
+  }
 
   // Setup rotation angle of each #
   perfecthalf = ((1 / 37) * 360) / 2;
@@ -31,20 +38,22 @@ export class AppComponent implements OnInit {
 
   //wheel operations
   blurWheel = false;
-  wheelImg;
+  wheelImg: any;
 
-  constructor(private rd: Renderer2, private web3: Web3Service){}
+  constructor(
+    private rd: Renderer2,
+    private web3: Web3Service){}
 
   ngOnInit() {
     // $(".wheel img").css("transform", "rotate(" + this.perfecthalf + "deg)");
-    this.wheelImg = this.wheel.nativeElement;
   }
 
   public metamaskConnect(){
+    console.log("Metamask connect trigger");
     this.web3.connectToMetaMask();
   }
 
-  public getRandomInt(min, max) {
+  public getRandomInt(min:any, max:any) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 

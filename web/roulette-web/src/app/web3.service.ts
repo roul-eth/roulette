@@ -11,8 +11,8 @@ export class Web3Service{
     private web3: any;
     private chainId: any;
     private networkId: any;
-    private contracts: {};
-    public activeAccount; // tracks what account address is currently used.
+    // private contracts: {};
+    public activeAccount: any; // tracks what account address is currently used.
     public accounts = []; // metamask or other accounts
 
     /** this Subject is like a Event fired. When wallet address (account) is changed then this gets fired. 
@@ -53,7 +53,7 @@ export class Web3Service{
 
         console.log("Chain ID: " + self.chainId + ", network ID: " + self.networkId)
 
-        await window.ethereum.request({method: 'eth_requestAccounts'}).then((data)=>{
+        await window.ethereum.request({method: 'eth_requestAccounts'}).then((data: any)=>{
             console.log("accounts", data);
         });
     }
