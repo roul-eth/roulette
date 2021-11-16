@@ -1,0 +1,56 @@
+body {
+    margin: 0;
+    background: tomato;
+    overflow: hidden !important ;
+  }
+
+  .header {
+    background-color: red;
+  }
+  
+  .roulette {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  
+    .wheel img {
+      transition: transform 7s cubic-bezier(0.3, 1, 0.7, 1),
+        7s filter cubic-bezier(0.1, 1, 0.8, 1),
+        7s -webkit-filter cubic-bezier(0.1, 1, 0.8, 1);
+      will-change: transform;
+      border-radius: 50%;
+      box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 600px;
+      /* border:4px dashed rgba(255,255,255, .5); */
+    }
+  
+    .arrow {
+      width: 0;
+      height: 0;
+      border: 80px solid transparent;
+      border-top: 110px solid tomato;
+      position: fixed;
+      left: 50%;
+      transform: translate(-50%, -100px);
+      z-index: 20;
+      border-radius: 0.35em;
+    }
+    .arrow:after {
+    }
+  }
+  
+  .spin {
+    cursor: crosshair;
+  }
+  
+  .wheelBlur {
+    filter: blur(2px);
+  }
+  
+  .noWheelBlur {
+    filter: blur(0px);
+  }
+  

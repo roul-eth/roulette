@@ -1,0 +1,11 @@
+<div class="header">
+  <button (click)="metamaskConnect()"> Connect to MetaMask</button>
+</div>
+
+<div class="roulette" (click)="wheelSpin()">
+  <div class="wheel spin" [ngClass]="{'wheelBlur': blurWheel, 'noWheelBlur': !blurWheel}">
+    <div class="arrow">
+    </div>
+    <img #wheel src="https://i.imgur.com/N01W3Ks.png">
+  </div>
+</div>
