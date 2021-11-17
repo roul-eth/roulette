@@ -25,22 +25,14 @@ module.exports = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200
+        runs: 1000
       }
     }
   },
-  etherscan: {
-    apiKey: process.env.ETHERSCAN_KEY
-  },
-  gasReporter: {
-    enabled: true,
-    currency: "USD",
-    coinmarketcap: `${process.env.COINMARKETCAP_KEY}`
-  },
   networks: {
-    rinkeby: {
-      url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_KEY}`,
-      accounts: [`${process.env.DEPLOYER_PK}`],
+    development: {
+      url: `http://127.0.0.1:8545`,
+      accounts: [`5be168f78381f7c1f9cc873d20a44645bc1356d16c8a0a403b968845e3ef774d`],
     },
   },
 };

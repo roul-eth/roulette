@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.0;
+pragma solidity 0.8.9;
 
-import {IResolver} from "./IResolver.sol";
+import {IResolver} from "../interfaces/IResolver.sol";
 
 interface IRNG {
     function lastExecuted() external view returns (uint);

@@ -1,5 +1,10 @@
 {
   "name": "hardhat-project",
+  "scripts": {
+    "deploy": "hardhat run --network development scripts/deploy.js",
+    "compile": "hardhat compile",
+    "console": "hardhat console --network development"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-etherscan": "^2.1.7",
@@ -13,6 +18,7 @@
     "@angular/cli": "^13.0.2",
     "@chainlink/contracts": "^0.2.2",
     "@openzeppelin/contracts": "^4.3.3",
+    "clear": "^0.1.0",
     "dotenv": "^10.0.0"
   }
 }
