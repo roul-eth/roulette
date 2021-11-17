@@ -7,8 +7,9 @@ import { Web3Service } from "./web3.service";
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnInit {
-  
+
   wheel: any;
+  resultNumber: number = 0;
   // DOm Manipulate wheel spin
   @ViewChild('wheel')
   set wheelRef(v: ElementRef) {
@@ -58,7 +59,7 @@ export class AppComponent implements OnInit {
   }
 
   public spin() {
-    this.spin_number = this.getRandomInt(1, 36);
+    this.spin_number = this.resultNumber;
     this.step = this.roulette_numbers.findIndex((n) => n === this.spin_number);
     console.log(
       "Rolling #",
