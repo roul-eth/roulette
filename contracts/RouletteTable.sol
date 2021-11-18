@@ -4,22 +4,22 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "./CasinoLibrary.sol";
-import "./RouletteSpinCasino.sol";
+import "../interfaces/IRouletteSpinCasino.sol";
 
 contract RouletteTable is ERC721, ERC721Burnable {
     address public operator; // Owner of the table
 
     CasinoLibrary.TableStatus public tableStatus;
     mapping(uint256 => CasinoLibrary.Bet) public currentBets;
-    uint256 betCount = 0;
-    uint256 betsAmount = 0;
-    uint256 maxPayout = 0;
+    uint256 betCount;
+    uint256 betsAmount;
+    uint256 maxPayout;
 
-    RouletteSpinCasino public casino;
+    IRouletteSpinCasino public casino;
     
     constructor(address _operator,address casinoAddress) ERC721("Roulette Table", "RTBL") {
         operator = _operator;
-        casino = RouletteSpinCasino(casinoAddress);
+        casino = IRouletteSpinCasino(casinoAddress);
     }
     
     function mint(address to, uint256 tokenId) public {
@@ -28,11 +28,15 @@ contract RouletteTable is ERC721, ERC721Burnable {
     }
     
     function deposit(uint256 amount) public {
-        casino.deposit(address(this), amount);
+        casino.deposit(msg.sender, amount);
     }
     
-    function getBets() public view returns (uint256) {
-        return betsAmount;
+    function getBets() public view returns (CasinoLibrary.Bet[] memory) {
+        CasinoLibrary.Bet[] memory bets;
+        for (uint256 i = 0; i < betCount; i++) {
+            bets[i] = currentBets[i];
+        }
+        return bets;
     }
 
     function bet(CasinoLibrary.Bet[] memory bets) public {

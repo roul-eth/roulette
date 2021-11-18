@@ -5,13 +5,14 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./RouletteTable.sol";
+import "../interfaces/IRouletteSpinCasino.sol";
 
 /// @custom:security-contact mouradif@devhunt.eu
-contract RouletteSpinCasino is ERC20, ERC20Burnable, Ownable {
+contract RouletteSpinCasino is IRouletteSpinCasino, ERC20, ERC20Burnable, Ownable {
     mapping(bytes32 => RouletteTable) private _tables;
     mapping(address => bool) private _isTable;
     address[] private _tableAddresses;
-    
+
     constructor() ERC20("Roulette Spin", "RSPN") {}
 
     function mint(address to, uint256 amount) public onlyOwner {
@@ -23,7 +24,7 @@ contract RouletteSpinCasino is ERC20, ERC20Burnable, Ownable {
         _mint(msg.sender, 500);
     }
 
-    function mintTable(uint256 initialAmount) public returns (address) {
+    function mintTable(uint256 initialAmount) public returns (address tableAddress) {
         require(initialAmount > 0, "You need to stake some funds in that table");
         RouletteTable table = new RouletteTable(msg.sender, address(this));
         address tableAddress = address(table);
@@ -31,7 +32,7 @@ contract RouletteSpinCasino is ERC20, ERC20Burnable, Ownable {
         _isTable[tableAddress] = true;
         _tableAddresses.push(tableAddress);
         table.mint(msg.sender, 0);
-        return tableAddress;
+        return address(table);
     }
 
     function getTables() public view returns (address[] memory) {

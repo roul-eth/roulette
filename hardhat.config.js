@@ -3,6 +3,8 @@ require("@nomiclabs/hardhat-etherscan");
 
 require("dotenv").config();
 
+const parseNetworks = require('./utils/env.networks');
+
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
@@ -29,10 +31,13 @@ module.exports = {
       }
     }
   },
-  networks: {
-    development: {
-      url: `http://127.0.0.1:7545`,
-      accounts: [`4dc4bb6166bfde02552f9e42f01ea07b0ccac805e5b43b9fba3b2bd21b8bc41f`],
-    },
-  },
+  etherscan: (Object.prototype.hasOwnProperty.call(process.env, 'ETHERSCAN_KEY')) ? {
+    apiKey: process.env.ETHERSCAN_KEY
+  } : undefined,
+  gasReporter: (Object.prototype.hasOwnProperty.call(process.env, 'COINMARKETCAP_KEY')) ? {
+    enabled: true,
+    currency: "USD",
+    coinmarketcap: `${process.env.COINMARKETCAP_KEY}`
+  }: undefined,
+  networks: parseNetworks(process.env)
 };

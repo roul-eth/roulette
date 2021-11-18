@@ -24,13 +24,13 @@ library CasinoLibrary {
 
     function RBSSingleNumber(uint8 number) public pure returns (RouletteBettingSlot memory rbs) {
         require(number < 37, "That number will never be drawn");
-        uint8[] memory numbers;
+        uint8[] memory numbers = new uint8[](1);
         numbers[0] = number;
         return RouletteBettingSlot(numbers, 36);
     }
 
     function RBSRed() public pure returns (RouletteBettingSlot memory rbs) {
-        uint8[] memory numbers;
+        uint8[] memory numbers = new uint8[](18);
         numbers[0] = 1;
         numbers[1] = 3;
         numbers[2] = 5;
@@ -53,7 +53,7 @@ library CasinoLibrary {
     }
 
     function RBSBlack() public pure returns (RouletteBettingSlot memory rbs) {
-        uint8[] memory numbers;
+        uint8[] memory numbers = new uint8[](18);
         numbers[0] = 2;
         numbers[1] = 4;
         numbers[2] = 6;
@@ -76,7 +76,7 @@ library CasinoLibrary {
     }
 
     function RBSOdd() public pure returns (RouletteBettingSlot memory rbs) {
-        uint8[] memory numbers;
+        uint8[] memory numbers = new uint8[](18);
         numbers[0] = 1;
         numbers[1] = 3;
         numbers[2] = 5;
@@ -99,7 +99,7 @@ library CasinoLibrary {
     }
 
     function RBSEven() public pure returns (RouletteBettingSlot memory rbs) {
-        uint8[] memory numbers;
+        uint8[] memory numbers = new uint8[](18);
         numbers[0] = 2;
         numbers[1] = 4;
         numbers[2] = 6;
