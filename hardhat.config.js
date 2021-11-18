@@ -25,14 +25,14 @@ module.exports = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 1000
+        runs: 10
       }
     }
   },
   networks: {
     development: {
-      url: `http://127.0.0.1:8545`,
-      accounts: [`5be168f78381f7c1f9cc873d20a44645bc1356d16c8a0a403b968845e3ef774d`],
+      url: `http://127.0.0.1:7545`,
+      accounts: [`4dc4bb6166bfde02552f9e42f01ea07b0ccac805e5b43b9fba3b2bd21b8bc41f`],
     },
   },
 };
