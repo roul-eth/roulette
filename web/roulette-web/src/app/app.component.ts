@@ -41,6 +41,9 @@ export class AppComponent implements OnInit {
   blurWheel = false;
   wheelImg: any;
 
+  //vars 
+  mintTableAmount: number = 0;
+
   constructor(
     private rd: Renderer2,
     private web3: Web3Service){}
@@ -117,9 +120,16 @@ export class AppComponent implements OnInit {
     })
   }
 
+  public mintTable(){
+    this.web3.mintTable(this.mintTableAmount).then((result:any)=>{
+      console.log("Mint table", result);
+    })
+  }
+
   public getBalanceOf(){
     this.web3.balanceOf().then((result: any)=>{
       console.log(result);
     })
   }
+
 }

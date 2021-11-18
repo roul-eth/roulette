@@ -21,15 +21,19 @@
         <p></p>
       </div>
       <div class="col-6 col-sm-4">
+        <input type="number" [(ngModel)]="mintTableAmount">
+        <button (click)="mintTable()">Mint Table</button>
+      </div>
+      <div class="col-6 col-sm-4">
         <button (click)="getAllTables()">Get All Tables</button>
       </div>
 
       <div class="w-100 d-none d-md-block"></div>
       <div class="col-6 col-sm-4">
-        <button (click)="callPublicMint()">Public Mint</button>
+        
       </div>
       <div class="col-6 col-sm-4">
-        <button (click)="callPublicMint()">Public Mint</button>
+        
       </div>
     </div>
 
