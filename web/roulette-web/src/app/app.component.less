@@ -13,7 +13,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 64vh;
   
     .wheel img {
       transition: transform 7s cubic-bezier(0.3, 1, 0.7, 1),
@@ -22,7 +22,7 @@ body {
       will-change: transform;
       border-radius: 50%;
       box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
-      width: 100%;
+      width: 66%;
       max-width: 600px;
       /* border:4px dashed rgba(255,255,255, .5); */
     }
@@ -30,27 +30,33 @@ body {
     .arrow {
       width: 0;
       height: 0;
-      border: 80px solid transparent;
-      border-top: 110px solid tomato;
+      border: 54px solid transparent;
+      border-top: 80px solid tomato;
       position: fixed;
-      left: 50%;
+      left: 33%;
       transform: translate(-50%, -100px);
       z-index: 20;
       border-radius: 0.35em;
+      top: 7%;
     }
     .arrow:after {
     }
+
+    .spin {
+      cursor: crosshair;
+    }
+    
+    .wheelBlur {
+      filter: blur(2px);
+    }
+    
+    .noWheelBlur {
+      filter: blur(0px);
+    }
   }
-  
-  .spin {
-    cursor: crosshair;
-  }
-  
-  .wheelBlur {
-    filter: blur(2px);
-  }
-  
-  .noWheelBlur {
-    filter: blur(0px);
+
+  .methodTable {
+    display: block;
+    background-color: coral;
   }
   

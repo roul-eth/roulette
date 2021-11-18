@@ -103,4 +103,23 @@ export class AppComponent implements OnInit {
 
     this.lastLength = this.currentLength;
   }
+
+  /**Web3 contract methods */
+  public getAllTables(){
+    this.web3.getTables().then((result: any)=>{
+      console.log(result);
+    })
+  }
+
+  public callPublicMint(){
+    this.web3.publicMint().then((result: any)=>{
+      console.log(result);
+    })
+  }
+
+  public getBalanceOf(){
+    this.web3.balanceOf().then((result: any)=>{
+      console.log(result);
+    })
+  }
 }

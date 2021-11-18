@@ -1,5 +1,5 @@
 <div class="header">
-  <input type="number" [ngModel]="resultNumber">
+  <input type="number" [(ngModel)]="resultNumber">
   <button (click)="metamaskConnect()"> Connect to MetaMask</button>
 </div>
 
@@ -8,5 +8,30 @@
     <div class="arrow">
     </div>
     <img #wheel src="https://i.imgur.com/N01W3Ks.png">
+  </div>
+</div>
+<div class="methodTable"> 
+  <div class="container">
+    <div class="row align-items-start">
+      <div class="col-6 col-4">
+        <button (click)="callPublicMint()">Public Mint</button>
+      </div>
+      <div class="col-6 col-sm-4">
+        <button (click)="getBalanceOf()">Balance Of</button>
+        <p></p>
+      </div>
+      <div class="col-6 col-sm-4">
+        <button (click)="getAllTables()">Get All Tables</button>
+      </div>
+
+      <div class="w-100 d-none d-md-block"></div>
+      <div class="col-6 col-sm-4">
+        <button (click)="callPublicMint()">Public Mint</button>
+      </div>
+      <div class="col-6 col-sm-4">
+        <button (click)="callPublicMint()">Public Mint</button>
+      </div>
+    </div>
+
   </div>
 </div>
