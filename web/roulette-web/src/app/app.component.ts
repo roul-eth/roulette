@@ -1,5 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from "@angular/core";
 import { Web3Service } from "./web3.service";
+import { SplashScreenService } from './splashScreen/splashscreen.service';
+
 
 @Component({
   selector: 'app-root',
@@ -48,10 +50,15 @@ export class AppComponent implements OnInit {
 
   constructor(
     private rd: Renderer2,
-    private web3: Web3Service){}
+    private web3: Web3Service,
+    private splashscreen: SplashScreenService){}
 
   ngOnInit() {
     // $(".wheel img").css("transform", "rotate(" + this.perfecthalf + "deg)");
+    setTimeout(()=>{
+      console.log("SplashScreem stop")
+      this.splashscreen.stop();
+    }, 5000);
   }
 
   public metamaskConnect(){
