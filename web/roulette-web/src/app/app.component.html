@@ -3,35 +3,145 @@
   <button (click)="metamaskConnect()"> Connect to MetaMask</button>
 </div>
 
-<div class="roulette" (click)="wheelSpin()">
-  <div class="wheel spin" [ngClass]="{'wheelBlur': blurWheel, 'noWheelBlur': !blurWheel}">
-    <div class="arrow">
-    </div>
-    <img #wheel src="https://i.imgur.com/N01W3Ks.png">
-  </div>
-</div>
-<div class="methodTable"> 
-  <div class="container">
-    <div class="row align-items-start">
-      <div class="col-6 col-4">
-        <button (click)="callPublicMint()">Public Mint</button>
+<div class="container-fluid">
+  <div class="row roulette-background">
+    <div class="col-4">
+      <div class="roulette">
+        <div class="wheel spin" [ngClass]="{'wheelBlur': blurWheel, 'noWheelBlur': !blurWheel}" (click)="wheelSpin()">
+          <div class="arrow">
+          </div>
+          <img #wheel src="https://i.imgur.com/N01W3Ks.png">
+        </div>
       </div>
-      <div class="col-6 col-sm-4">
+    </div>
+    <div class="col-8">
+      <div class="roulette-table rtablePaddingTop">
+        <div class="row">
+          <div hoverHighlight class="col colWhiteBorder zeroColStyl"> 0 </div>
+          <div class="col colWhiteBorder colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 3 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 2 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 1 </div>
+          </div>
+          <div class="col colWhiteBorder colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 6 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 5 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 4 </div>
+          </div>
+          <div class="col colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 9 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 8 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 7 </div>
+          </div>
+          <div class="col colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 12 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 11 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 10 </div>
+          </div>
+          <div class="col colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 15 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 14 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 13 </div>
+          </div>
+          <div class="col colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 18 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 17 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 16 </div>
+          </div>
+          <div class="col colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 21 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 20 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 19 </div>
+          </div>
+          <div class="col colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 24 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 23 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 22 </div>
+          </div>
+          <div class="col colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 27 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 26 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 25 </div>
+          </div>
+          <div class="col colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 30 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 29 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 28 </div>
+          </div>
+          <div class="col colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 33 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 32 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 31 </div>
+          </div>
+          <div class="col colNumPad">
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 36 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 35 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 34 </div>
+          </div>
+          <div class="col colNumPad">
+            <div hoverHighlight class="col colWhiteBorder twoOneColStyl"> 2 to 1 </div>
+            <div hoverHighlight class="col colWhiteBorder twoOneColStyl"> 2 to 1 </div>
+            <div hoverHighlight class="col colWhiteBorder twoOneColStyl"> 2 to 1 </div>
+          </div>
+        </div>
+      </div>
+      <div class="roulette-table">
+        <div class="row">
+          <div class="sectionColEmpty"></div>
+          <div hoverHighlight class="col colWhiteBorder sectionColFirst"> 1st 12 </div>
+          <div hoverHighlight class="col colWhiteBorder sectionColSecond"> 2nd 12 </div>
+          <div hoverHighlight class="col colWhiteBorder sectionColThird"> 3rd 12 </div>
+          <div class="sectionColEmpty"></div>
+        </div>
+      </div>
+      <div class="roulette-table">
+        <div class="row">
+          <div class="sectionColEmpty"></div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol"> 1 to 18 </div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol"> EVEN </div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol redsquare"> RED </div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol blacksquare"> BLACK </div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol"> ODD </div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol"> 19 to 36 </div>
+          <div class="sectionColEmpty"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6 col-4">
+      <button (click)="callPublicMint()">Public Mint</button>
+    </div>
+    <div class="row align-items-center col-6 col-sm-4">
+      <div class="col-6">
         <button (click)="getBalanceOf()">Balance Of</button>
-        <p></p>
       </div>
-      <div class="col-6 col-sm-4">
-        <button (click)="getAllTables()">Get All Tables</button>
+      <div class="col-6">
+        <span>{{tokenBalance}}</span>
       </div>
-
-      <div class="w-100 d-none d-md-block"></div>
-      <div class="col-6 col-sm-4">
-        <button (click)="callPublicMint()">Public Mint</button>
-      </div>
-      <div class="col-6 col-sm-4">
-        <button (click)="callPublicMint()">Public Mint</button>
-      </div>
+      
+      
+    </div>
+    <div class="col-6 col-sm-4">
+      <input type="number" [(ngModel)]="mintTableAmount">
+      <button (click)="mintTable()">Mint Table</button>
+    </div>
+    <div class="col-6 col-sm-4">
+      <button (click)="getAllTables()">Get All Tables</button>
+      <ng-container *ngFor="let add of casinoTablesArray">
+        <p>{{add}}</p>
+      </ng-container>
     </div>
 
+    <div class="w-100 d-none d-md-block"></div>
+    <div class="col-6 col-sm-4">
+      
+    </div>
+    <div class="col-6 col-sm-4">
+      
+    </div>
   </div>
 </div>
+
+<splashScreen></splashScreen>
+<router-outlet></router-outlet>

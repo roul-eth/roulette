@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.2;
+pragma solidity ^0.8.9;
 
 library CasinoLibrary {
     struct RouletteBettingSlot {
@@ -22,15 +22,15 @@ library CasinoLibrary {
         return id <= 40;
     }
 
-    function RBSSingleNumber(uint8 number) public pure returns (RouletteBettingSlot memory) {
+    function RBSSingleNumber(uint8 number) public pure returns (RouletteBettingSlot memory rbs) {
         require(number < 37, "That number will never be drawn");
-        uint8[] memory numbers;
+        uint8[] memory numbers = new uint8[](1);
         numbers[0] = number;
         return RouletteBettingSlot(numbers, 36);
     }
 
-    function RBSRed() public pure returns (RouletteBettingSlot memory) {
-        uint8[] memory numbers;
+    function RBSRed() public pure returns (RouletteBettingSlot memory rbs) {
+        uint8[] memory numbers = new uint8[](18);
         numbers[0] = 1;
         numbers[1] = 3;
         numbers[2] = 5;
@@ -52,8 +52,8 @@ library CasinoLibrary {
         return RouletteBettingSlot(numbers, 2);
     }
 
-    function RBSBlack() public pure returns (RouletteBettingSlot memory) {
-        uint8[] memory numbers;
+    function RBSBlack() public pure returns (RouletteBettingSlot memory rbs) {
+        uint8[] memory numbers = new uint8[](18);
         numbers[0] = 2;
         numbers[1] = 4;
         numbers[2] = 6;
@@ -75,8 +75,8 @@ library CasinoLibrary {
         return RouletteBettingSlot(numbers, 2);
     }
 
-    function RBSOdd() public pure returns (RouletteBettingSlot memory) {
-        uint8[] memory numbers;
+    function RBSOdd() public pure returns (RouletteBettingSlot memory rbs) {
+        uint8[] memory numbers = new uint8[](18);
         numbers[0] = 1;
         numbers[1] = 3;
         numbers[2] = 5;
@@ -98,8 +98,8 @@ library CasinoLibrary {
         return RouletteBettingSlot(numbers, 2);
     }
 
-    function RBSEven() public pure returns (RouletteBettingSlot memory) {
-        uint8[] memory numbers;
+    function RBSEven() public pure returns (RouletteBettingSlot memory rbs) {
+        uint8[] memory numbers = new uint8[](18);
         numbers[0] = 2;
         numbers[1] = 4;
         numbers[2] = 6;
@@ -121,7 +121,7 @@ library CasinoLibrary {
         return RouletteBettingSlot(numbers, 2);
     }
 
-    function RBS(uint8 id) public pure returns (RouletteBettingSlot memory) {
+    function RBS(uint8 id) public pure returns (RouletteBettingSlot memory rbs) {
         require(isValidBetId(id), "Found an invalid Betting ID");
         if (id < 37) return RBSSingleNumber(id);
         if (id == 37) return RBSRed();

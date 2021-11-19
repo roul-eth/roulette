@@ -8,13 +8,24 @@ body {
     background-color: red;
   }
   
+  .roulette-background {
+    background-image: url(https://t4.ftcdn.net/jpg/03/25/38/41/240_F_325384191_sg1D5lYWfRedGQsBm8xIHnsSAUUUVxGE.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
   .roulette {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 64vh;
-  
+    height: 67vh;
+
+
+    .wheel {
+
+    }
+
     .wheel img {
       transition: transform 7s cubic-bezier(0.3, 1, 0.7, 1),
         7s filter cubic-bezier(0.1, 1, 0.8, 1),
@@ -22,22 +33,23 @@ body {
       will-change: transform;
       border-radius: 50%;
       box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
-      width: 66%;
+      width: 90%;
       max-width: 600px;
       /* border:4px dashed rgba(255,255,255, .5); */
     }
-  
+
+
     .arrow {
       width: 0;
       height: 0;
-      border: 54px solid transparent;
-      border-top: 80px solid tomato;
+      border: 31px solid transparent;
+      border-top: 32px solid tomato;
       position: fixed;
       left: 33%;
-      transform: translate(-50%, -100px);
+      transform: translate(31%, -29px);
       z-index: 20;
       border-radius: 0.35em;
-      top: 7%;
+      // top: 7%;
     }
     .arrow:after {
     }
@@ -55,6 +67,105 @@ body {
     }
   }
 
+  .rtablePaddingTop {
+    padding-top: 10%
+  }
+
+  .roulette-table {
+    
+    display: flex;
+    position: relative;
+    width: auto;
+    // border: 3px solid white;
+
+    .row{
+
+      .colWhiteBorder{
+        border: 1px solid white;
+      }
+
+      .redsquare{
+        background-color: red;
+      }
+
+      .blacksquare{
+        background-color: black;
+      }
+
+      .colNumPad{
+        padding: 0px;
+      }
+
+      .zeroColStyl{
+        height: 21vh;
+        font-size: xxx-large;
+        color: white;
+        text-align: -webkit-center;
+        padding-top: 57px;
+      }
+
+      .colNumStyl {
+        height: 7vh;
+        width: 7vh;
+        font-size: x-large;
+        color: white;
+        text-align: -webkit-center;
+        padding-top: 14px;
+      }
+
+      .twoOneColStyl {
+        height: 7vh;
+        width: 7vh;
+        font-size: medium;
+        color: white;
+        text-align: -webkit-center;
+        padding-top: 12px;
+        transform: rotate(90deg);
+      }
+
+      .sectionColEmpty {
+        width: 52px
+      }
+      .sectionColFirst {
+        height: 7vh;
+        width: 270px;
+        font-size: x-large;
+        color: white;
+        text-align: -webkit-center;
+        padding-top: 14px;
+      }
+      .sectionColSecond {
+        height: 7vh;
+        width: 260px;
+        font-size: x-large;
+        color: white;
+        text-align: -webkit-center;
+        padding-top: 14px;
+      }
+      .sectionColThird {
+        height: 7vh;
+        width: 270px;
+        font-size: x-large;
+        color: white;
+        text-align: -webkit-center;
+        padding-top: 14px;
+      }
+
+      .lastSectionCol{
+        height: 7vh;
+        width: 14.1vh;
+        font-size: x-large;
+        color: white;
+        text-align: -webkit-center;
+        padding-top: 12px;
+      }
+
+      .hoverOver{
+        background-color: #ddd;
+      }
+    }
+    
+  }
   .methodTable {
     display: block;
     background-color: coral;

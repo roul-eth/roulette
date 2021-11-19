@@ -1,18 +1,31 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.2;
+pragma solidity ^0.8.9;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.3.3/contracts/token/ERC20/ERC20.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.3.3/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.3.3/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./RouletteTable.sol";
+import "../interfaces/IRouletteSpinCasino.sol";
+import "../interfaces/IRNG.sol";
+//import "./CasinoLibrary.sol";
 
 /// @custom:security-contact mouradif@devhunt.eu
-contract RouletteSpinCasino is ERC20, ERC20Burnable, Ownable {
+contract RouletteSpinCasino is IRouletteSpinCasino, ERC20, ERC20Burnable, Ownable {
     mapping(bytes32 => RouletteTable) private _tables;
     mapping(address => bool) private _isTable;
     address[] private _tableAddresses;
+    IRNG internal randomGenerator;
+    address public rngAddress;
     
-    constructor() ERC20("Roulette Spin", "RSPN") {}
+    modifier onlyRNG() {
+        require(msg.sender == address(randomGenerator), "Only RNG address");
+        _;
+    }
+
+    constructor(address _rng) ERC20("Roulette Spin", "RSPN") {
+        rngAddress = _rng;
+        randomGenerator = IRNG(_rng);
+    }
 
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
@@ -31,7 +44,7 @@ contract RouletteSpinCasino is ERC20, ERC20Burnable, Ownable {
         _isTable[tableAddress] = true;
         _tableAddresses.push(tableAddress);
         table.mint(msg.sender, 0);
-        return tableAddress;
+        return address(table);
     }
 
     function getTables() public view returns (address[] memory) {
@@ -52,4 +65,17 @@ contract RouletteSpinCasino is ERC20, ERC20Burnable, Ownable {
         _transfer(msg.sender, toTable, amount);
     }
 
+    function getWinningNumber(uint _roundId) public view returns (uint[] memory) {
+     
+        IRNG.drawingDetail memory dDetail = randomGenerator.transferRandom(_roundId);
+        uint tableCount = _tableAddresses.length;
+        uint[] memory tRNumbers = new uint[](tableCount);
+        
+        for (uint i=0; i<_tableAddresses.length; i++) {
+            tRNumbers[i] = uint(keccak256(abi.encodePacked(dDetail.randomNumber, _tableAddresses[i]))) % 37;
+        }
+        
+        return tRNumbers;
+	}
+        
 }

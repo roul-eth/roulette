@@ -2,7 +2,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 const Web3 = require('web3');
-var Web3Contract = require('web3-eth-contract');
+var Contract = require('web3-eth-contract');
 
 // Import contract abi (json)
 import CasinoLibrary from '../assets/CasinoLibrary.json';
@@ -22,9 +22,9 @@ export class Web3Service{
     public RouletteSpinCasinoInstance: any;
     public CasinoLibraryInstance: any;
 
-    /** this Subject is like a Event fired. When wallet address (account) is changed then this gets fired. 
-    *   we can use something similar to track other events. 
-    */ 
+    /** this Subject is like a Event fired. When wallet address (account) is changed then this gets fired.
+    *   we can use something similar to track other events.
+    */
 
     private accountChangeSubject = new BehaviorSubject<string>("");
     accountChanged = this.accountChangeSubject.asObservable();
@@ -43,8 +43,7 @@ export class Web3Service{
             console.log('Web3Service :: constructor :: this.web3');
             console.log(this.web3);
             window.web3 = new Web3(window.ethereum);
-            
-            Web3Contract.setProvider('ws://localhost:7545')
+            Contract.setProvider(this.web3);
         }
     }
 
@@ -67,16 +66,25 @@ export class Web3Service{
         }).catch((err: any)=>{
             console.log("Account Request failed", err);
         }).then(()=>{
+
             // read contract abi
             try {
                 // Get the contract instance.
                 // let deployedNetwork = RouletteSpin.networks[self.networkId];
 
-                self.RouletteSpinCasinoInstance = new Web3Contract(RouletteSpin.abi, '0x46553280CDa7EF93D843D132D1Cc20216c74f1b3');
+                self.RouletteSpinCasinoInstance = new Contract(RouletteSpin.abi, '0x9A3F1D93e36C1A6915B170f910F377A1896C92cB');
+
                 console.log("Roulette Instance: ",self.RouletteSpinCasinoInstance);
 
-                self.CasinoLibraryInstance = new Web3Contract(CasinoLibrary.abi, '0x46553280CDa7EF93D843D132D1Cc20216c74f1b3');
-                console.log("CasinoLibrary Instance: ",self.CasinoLibraryInstance);
+                // self.RouletteSpinCasinoInstance.methods.balanceOf(self.activeAccount).call().then(
+                //     function(result: any){
+                //         console.log("balanceOf", result);
+                //         return result;
+                //     }
+                // )
+
+                // self.CasinoLibraryInstance = new Web3Contract(CasinoLibrary.abi, '0x922FB30799FeA1A6992554Bc3d5991cB13665FEf');
+                // console.log("CasinoLibrary Instance: ",self.CasinoLibraryInstance);
 
             } catch (error) {
                 // Catch any errors for any of the above operations.
@@ -91,23 +99,23 @@ export class Web3Service{
     public mint(userAddress: string, amount: number){
         const self: this = this;
         return self.RouletteSpinCasinoInstance.methods.mint(userAddress, amount).send().then((result: any)=>{
-            console.log("mint called by owner of RouletteSpinCasino", result);
+            // console.log("mint called by owner of RouletteSpinCasino", result);
             return result;
         })
     }
 
     public publicMint(){
         const self: this = this;
-        return self.RouletteSpinCasinoInstance.methods.publicMint().call({from: this.activeAccount}).then((result: any)=>{
-            console.log("publicMint", result);
+        return self.RouletteSpinCasinoInstance.methods.publicMint().send({from: this.activeAccount}).then((result: any)=>{
+            // console.log("publicMint", result);
             return result;
         })
     }
 
     public mintTable(amount: number){
         const self: this = this;
-        return self.RouletteSpinCasinoInstance.methods.mintTable(amount).send().then((result: any)=>{
-            console.log("new table address", result);
+        return self.RouletteSpinCasinoInstance.methods.mintTable(amount).send({from:this.activeAccount }).then((result: any)=>{
+            // console.log("new table address", result);
             return result;
         })
     }
@@ -115,54 +123,41 @@ export class Web3Service{
     public getTables(){
         const self: this = this;
         return self.RouletteSpinCasinoInstance.methods.getTables().call().then((result: any)=>{
-            console.log("all tables", result);
+            // console.log("all tables", result);
             return result;
         })
     }
 
     public deposit(fromPlayer: string, amount: number){
         const self: this = this;
-        return self.RouletteSpinCasinoInstance.methods.deposit(fromPlayer, amount).send().then((result: any)=>{
-            console.log("deposit from player and amount", result);
+        return self.RouletteSpinCasinoInstance.methods.deposit(fromPlayer, amount).send({from:this.activeAccount}).then((result: any)=>{
+            // console.log("deposit from player and amount", result);
             return result;
         })
     }
 
     public fund(tableaddress: string, amount: number){
         const self: this = this;
-        return self.RouletteSpinCasinoInstance.methods.fund(tableaddress, amount).send().then((result: any)=>{
-            console.log("fund table with amount", result);
+        return self.RouletteSpinCasinoInstance.methods.fund(tableaddress, amount).send({from:this.activeAccount}).then((result: any)=>{
+            // console.log("fund table with amount", result);
             return result;
         })
     }
-    
+
     public async balanceOf(){
         const self: this = this;
-        await self.RouletteSpinCasinoInstance.methods.balanceOf(this.activeAccount)
-            .call({from: this.activeAccount})
-            .then( 
-            function(result: number){
-                console.log("totalSupply", result);
-                return result;
-            })
-    }
+        // const result = await  self.RouletteSpinCasinoInstance.methods.balanceOf(this.activeAccount).send({from:this.activeAccount});
 
-    public async NFTName(){
-        const self: this = this;
-        await self.RouletteSpinCasinoInstance.methods.name().call().then( 
-            function(result: number){
-                console.log("NFT Name", result);
-                return result;
-            })
-    }
+        // return result;
 
-    public async NFTSymbol(){
-        const self: this = this;
-        await self.RouletteSpinCasinoInstance.methods.symbol().call().then( 
-            function(result: number){
-                console.log("NFT symbol", result);
-                return result;
-            })
+      console.log({contract: self.RouletteSpinCasinoInstance, account: this.activeAccount});
+        return self.RouletteSpinCasinoInstance.methods.balanceOf(this.activeAccount).call()
+            .then(
+                function(result: any){
+                    // console.log("balanceOf", result);
+                    return result;
+                }
+            )
     }
 
 }
