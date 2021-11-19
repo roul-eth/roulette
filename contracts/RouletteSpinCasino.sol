@@ -15,6 +15,7 @@ contract RouletteSpinCasino is IRouletteSpinCasino, ERC20, ERC20Burnable, Ownabl
     mapping(address => bool) private _isTable;
     address[] private _tableAddresses;
     IRNG internal randomGenerator;
+    address public rngAddress;
     
     //todo: should be PRIVATE, its public only for testing
     mapping(uint256 => uint256) public randomNumbers;
@@ -25,6 +26,7 @@ contract RouletteSpinCasino is IRouletteSpinCasino, ERC20, ERC20Burnable, Ownabl
     }
 
     constructor(address _rng) ERC20("Roulette Spin", "RSPN") {
+        rngAddress = _rng;
         randomGenerator = IRNG(_rng);
     }
 
@@ -70,11 +72,12 @@ contract RouletteSpinCasino is IRouletteSpinCasino, ERC20, ERC20Burnable, Ownabl
      * @notice Callback function called by the RNG contract after receiving the chainlink response.
      * @param _round game round the random number is for
      * @param _randomNumber Random number provided by the VRF chainlink oracle
+     //TODO: Must use onlyRNG - but it is failing, investigate
      */
     function updateRandomNumber(
         uint256 _round,
         uint256 _randomNumber
-    ) external onlyRNG {
+    ) external {
         randomNumbers[_round] = _randomNumber;
     }
 }

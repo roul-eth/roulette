@@ -101,8 +101,8 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase, PokeMeReady {
 	   drawingsDetails[currentRound].roundId = currentRound;
 	   drawingsDetails[currentRound].lastExecuted = lastExecuted; 
 
-	   //bytes32 requestId = requestRandomness(keyHash, fee);
-	   bytes32 requestId = 0x1234567890123456789012345678901234567890123456789012345678901234;
+	   bytes32 requestId = requestRandomness(keyHash, fee);
+	   //bytes32 requestId = 0x1234567890123456789012345678901234567890123456789012345678901234;
 	   emit RandomNumberRequest(currentRound, requestId);
     }
 
@@ -122,7 +122,7 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase, PokeMeReady {
 		emit ResponseReceived(currentRound, requestId);
 	   
 	   //TODO: Must check this
-	   IRouletteSpinCasino(casinoAddr).updateRandomNumber(currentRound,randomness);
+	   //IRouletteSpinCasino(casinoAddr).updateRandomNumber(currentRound,randomness);
     }
 
 	//Temporary function, must be removed

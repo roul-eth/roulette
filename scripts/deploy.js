@@ -40,6 +40,9 @@ deployCasinoFactory = async () => {
   });
   casinoFactory = await CasinoFactory.deploy(randomness.address);
   console.log("RouletteSpinCasino deployed to:", casinoFactory.address);
+
+  await randomness.setCasinoAddress(casinoFactory.address);
+
 };
 
 /*deployRouletteTable = async () => {
