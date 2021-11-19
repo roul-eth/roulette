@@ -5,6 +5,13 @@ interface IRNG {
     /**
      * Requests randomness for a given lottery id
      */
-    function getRandomNumber() external;
+    struct drawingDetail	{
+	   uint roundId;
+	   uint lastExecuted;
+	   uint lastReturned;
+	   uint randomNumber;
+    }
+    
+    function transferRandom(uint _roundId) external view returns (drawingDetail memory dDetail);
         
 }

@@ -9,5 +9,4 @@ interface IRouletteSpinCasino is IERC20 {
     function mintTable(uint256 initialAmount) external returns (address);
     function deposit(address fromPlayer, uint256 amount) external;
     function fund(address toTable, uint256 amount) external;
-    function updateRandomNumber(uint256 _round, uint256 _randomNumber) external ;
 }

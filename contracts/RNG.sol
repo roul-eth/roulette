@@ -27,7 +27,7 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase, PokeMeReady {
 	   uint lastReturned;
 	   uint randomNumber;
     }
-    mapping (uint => drawingDetail) public drawingsDetails;
+    mapping (uint => drawingDetail) internal drawingsDetails;
 
     event casinoAddressChanged(address oldAddr, address newAddr);
    	event RandomNumberRequest(uint256 round, bytes32 requestId);
@@ -38,14 +38,8 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase, PokeMeReady {
 	   _;
     }
 
-/*construct with
-    0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B
-    0x01BE23585060835E02B77ef475b0Cc51aA1e0709
-    0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311
-    100000000000000000
-    0x8c089073A9594a4FB03Fa99feee3effF0e2Bc58a
-    
-    after constructing, need to send LINK to contract
+	/*
+    after constructing, need to send LINK to contract (CHAINLINK requirement)
     */
     constructor(
 	   address _vrfCoordinator,
@@ -75,14 +69,16 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase, PokeMeReady {
     
 	/**
 	* Requests randomness
+	references of address 0x5FbDB2315678afecb367f032d93F642f64180aa3 for debuging only (hardhat localnode contract addr)
 	*/
     //need to use modifier onlyPokeMe to allow only calls from GELATO
-	//need to uncomment the LINK require below (disabled for testing)
     function getRandomNumber() external	{
-	   /*require(
-		  (LINK.balanceOf(address(this)) >=	fee),
+	   if(address(this) != 0x5FbDB2315678afecb367f032d93F642f64180aa3) {
+	   require(
+		  (LINK.balanceOf(address(this)) >= fee),
 		  "Not enough LINK - fill contract"
-	   );*/
+	   );}
+
 	   require(
 		  ((block.timestamp	- lastExecuted) >= gelatoInterval),
 		  "Time for next gelato job not elapsed"
@@ -101,8 +97,10 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase, PokeMeReady {
 	   drawingsDetails[currentRound].roundId = currentRound;
 	   drawingsDetails[currentRound].lastExecuted = lastExecuted; 
 
-	   bytes32 requestId = requestRandomness(keyHash, fee);
-	   //bytes32 requestId = 0x1234567890123456789012345678901234567890123456789012345678901234;
+	   bytes32 requestId;
+	   if(address(this) != 0x5FbDB2315678afecb367f032d93F642f64180aa3) requestId = requestRandomness(keyHash, fee);
+	   else requestId = 0x1234567890123456789012345678901234567890123456789012345678901234;
+	   
 	   emit RandomNumberRequest(currentRound, requestId);
     }
 
@@ -120,10 +118,13 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase, PokeMeReady {
 		RNGPending = false;
 
 		emit ResponseReceived(currentRound, requestId);
-	   
-	   //TODO: Must check this
-	   //IRouletteSpinCasino(casinoAddr).updateRandomNumber(currentRound,randomness);
+  
     }
+
+	//to transfer the results of a draw to the main contract
+	function transferRandom(uint _roundId) external view onlyCasino returns (drawingDetail memory) {
+		return drawingsDetails[_roundId];
+	}
 
 	//Temporary function, must be removed
 	function forceRandom(bytes32 requestId,uint256 randomness) public onlyOwner 
@@ -137,9 +138,6 @@ contract RandomNumberConsumer is Ownable, VRFConsumerBase, PokeMeReady {
 		RNGPending = false;
 
 		emit ResponseReceived(currentRound, requestId);
-	   
-	   //TODO: Must check this
-	   IRouletteSpinCasino(casinoAddr).updateRandomNumber(currentRound,randomness);
     }
 
 	//Debugging function

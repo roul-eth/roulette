@@ -54,4 +54,6 @@ contract RouletteTable is ERC721, ERC721Burnable {
         require(maxPayout <= casino.balanceOf(address(this)), "We can't afford to pay you if you win"); 
         betsAmount += total;
     }
+
+    //function makePayments public
 }

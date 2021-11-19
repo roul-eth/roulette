@@ -17,9 +17,6 @@ contract RouletteSpinCasino is IRouletteSpinCasino, ERC20, ERC20Burnable, Ownabl
     IRNG internal randomGenerator;
     address public rngAddress;
     
-    //todo: should be PRIVATE, its public only for testing
-    mapping(uint256 => uint256) public randomNumbers;
-
     modifier onlyRNG() {
         require(msg.sender == address(randomGenerator), "Only RNG address");
         _;
@@ -68,16 +65,17 @@ contract RouletteSpinCasino is IRouletteSpinCasino, ERC20, ERC20Burnable, Ownabl
         _transfer(msg.sender, toTable, amount);
     }
 
-    /**
-     * @notice Callback function called by the RNG contract after receiving the chainlink response.
-     * @param _round game round the random number is for
-     * @param _randomNumber Random number provided by the VRF chainlink oracle
-     //TODO: Must use onlyRNG - but it is failing, investigate
-     */
-    function updateRandomNumber(
-        uint256 _round,
-        uint256 _randomNumber
-    ) external {
-        randomNumbers[_round] = _randomNumber;
-    }
+    function getWinningNumber(uint _roundId) public view returns (uint[] memory) {
+     
+        IRNG.drawingDetail memory dDetail = randomGenerator.transferRandom(_roundId);
+        uint tableCount = _tableAddresses.length;
+        uint[] memory tRNumbers = new uint[](tableCount);
+        
+        for (uint i=0; i<_tableAddresses.length; i++) {
+            tRNumbers[i] = uint(keccak256(abi.encodePacked(dDetail.randomNumber, _tableAddresses[i]))) % 37;
+        }
+        
+        return tRNumbers;
+	}
+        
 }
