@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./RouletteTable.sol";
 import "../interfaces/IRouletteSpinCasino.sol";
 import "../interfaces/IRNG.sol";
+import "../interfaces/ITableNFT.sol";
 //import "./CasinoLibrary.sol";
 
 /// @custom:security-contact mouradif@devhunt.eu
@@ -15,16 +16,20 @@ contract RouletteSpinCasino is IRouletteSpinCasino, ERC20, ERC20Burnable, Ownabl
     mapping(address => bool) private _isTable;
     address[] private _tableAddresses;
     IRNG internal randomGenerator;
+    ITableNFT internal tableNFT;
     address public rngAddress;
-    
+    address public tableNFTAddress;
+
     modifier onlyRNG() {
         require(msg.sender == address(randomGenerator), "Only RNG address");
         _;
     }
 
-    constructor(address _rng) ERC20("Roulette Spin", "RSPN") {
+    constructor(address _rng, address _tableNFT) ERC20("Roulette Spin", "RSPN") {
         rngAddress = _rng;
         randomGenerator = IRNG(_rng);
+        tableNFTAddress = _tableNFT;
+        tableNFT = ITableNFT(_tableNFT);
     }
 
     function mint(address to, uint256 amount) public onlyOwner {
@@ -36,15 +41,15 @@ contract RouletteSpinCasino is IRouletteSpinCasino, ERC20, ERC20Burnable, Ownabl
         _mint(msg.sender, 500);
     }
 
-    function mintTable(uint256 initialAmount) public returns (address) {
+    function mintTable(uint256 initialAmount) public {
         require(initialAmount > 0, "You need to stake some funds in that table");
+        tableNFT.safeMint(msg.sender);
         RouletteTable table = new RouletteTable(msg.sender, address(this));
         address tableAddress = address(table);
         _transfer(msg.sender, tableAddress, initialAmount);
         _isTable[tableAddress] = true;
         _tableAddresses.push(tableAddress);
-        table.mint(msg.sender, 0);
-        return address(table);
+        emit TableCreated(tableAddress);
     }
 
     function getTables() public view returns (address[] memory) {

@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "./CasinoLibrary.sol";
 import "../interfaces/IRouletteSpinCasino.sol";
 
-contract RouletteTable is ERC721, ERC721Burnable {
+contract RouletteTable {
     address public operator; // Owner of the table
 
     CasinoLibrary.TableStatus public tableStatus;
@@ -16,21 +14,16 @@ contract RouletteTable is ERC721, ERC721Burnable {
     uint256 maxPayout;
 
     IRouletteSpinCasino public casino;
-    
-    constructor(address _operator,address casinoAddress) ERC721("Roulette Table", "RTBL") {
+
+    constructor(address _operator,address casinoAddress) {
         operator = _operator;
         casino = IRouletteSpinCasino(casinoAddress);
-    }
-    
-    function mint(address to, uint256 tokenId) public {
-        require(msg.sender == address(casino), "Only the casino can mint a roulette table");
-        _mint(to, tokenId);
     }
     
     function deposit(uint256 amount) public {
         casino.deposit(msg.sender, amount);
     }
-    
+
     function getBets() public view returns (CasinoLibrary.Bet[] memory) {
         CasinoLibrary.Bet[] memory bets;
         for (uint256 i = 0; i < betCount; i++) {
@@ -51,7 +44,7 @@ contract RouletteTable is ERC721, ERC721Burnable {
             currentBets[betCount++] = bets[i];
         }
         require(total <= casino.balanceOf(msg.sender), "Don't bet more than you can afford");
-        require(maxPayout <= casino.balanceOf(address(this)), "We can't afford to pay you if you win"); 
+        require(maxPayout <= casino.balanceOf(address(this)), "We can't afford to pay you if you win");
         betsAmount += total;
     }
 

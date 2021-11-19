@@ -1,5 +1,6 @@
 const { expect, assert } = require("chai");
 const HardHat = require("hardhat");
+const Config = require('../config');
 
 let Casino;
 let Table;
@@ -8,19 +9,32 @@ let signers;
 before(async () => {
   signers = await HardHat.ethers.getSigners();
 
+  const RNGFactory = await hre.ethers.getContractFactory("RandomNumberConsumer");
+  const RNG = await RNGFactory.deploy(
+    Config.VRFCoordinator,
+    Config.LINKTToken,
+    Config.KeyHash,
+    hre.ethers.utils.parseEther("0.1"),
+    Config.PokeMe)
+  const TableNFTFactory = await hre.ethers.getContractFactory("TableNFT");
+  const TableNFT = await TableNFTFactory.deploy()
+
   const CasinoLibraryFactory = await HardHat.ethers.getContractFactory("CasinoLibrary");
   const CasinoLibrary = await CasinoLibraryFactory.deploy();
+  await CasinoLibrary.deployed();
 
   const RouletteSpinCasinoFactory = await HardHat.ethers.getContractFactory("RouletteSpinCasino", {
     libraries: {
       CasinoLibrary: CasinoLibrary.address
     }
   });
-  Casino = await RouletteSpinCasinoFactory.deploy()
+  Casino = await RouletteSpinCasinoFactory.deploy(RNG.address, TableNFT.address)
+  await TableNFT.setMinter(Casino.address);
   await Casino.mint(signers[1].address, 1000);
   const transaction = await Casino.connect(signers[1]).mintTable(500);
   const result = await transaction.wait();
-  const tableAddress = result.events[1].address;
+  const tableCreationEvent = result.events.find(e => e.event === 'TableCreated');
+  const tableAddress = '0x' + tableCreationEvent.data.slice(-40);
   const RouletteTableFactory = await HardHat.ethers.getContractFactory("RouletteTable", {
     libraries: {
       CasinoLibrary: CasinoLibrary.address
@@ -32,6 +46,7 @@ before(async () => {
 describe('Table status', () => {
   it("Has no bets when freshly minted", async () => {
     const bets = await Table.getBets();
+    console.log({bets});
     expect(await Table.getBets()).to.have.lengthOf(0);
   });
 

@@ -15,7 +15,6 @@ contract TableNFT is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl {
 
     constructor() ERC721("RouletteTable", "RTable") {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(MINTER_ROLE, msg.sender);
     }
 
     function safeMint(address to) public onlyRole(MINTER_ROLE) {
@@ -24,6 +23,9 @@ contract TableNFT is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl {
         _safeMint(to, tokenId);
     }
 
+    function setMinter(address operator) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        _setupRole(MINTER_ROLE, operator);
+    }
     // The following functions are overrides required by Solidity.
 
     function _beforeTokenTransfer(

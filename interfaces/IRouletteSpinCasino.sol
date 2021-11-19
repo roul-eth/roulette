@@ -5,8 +5,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /// @custom:security-contact mouradif@devhunt.eu
 interface IRouletteSpinCasino is IERC20 {
+    event TableCreated(address tableAddress);
     function mint(address to, uint256 amount) external;
-    function mintTable(uint256 initialAmount) external returns (address);
+    function mintTable(uint256 initialAmount) external;
     function deposit(address fromPlayer, uint256 amount) external;
     function fund(address toTable, uint256 amount) external;
 }

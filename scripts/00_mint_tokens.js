@@ -1,7 +1,18 @@
 const hre = require("hardhat");
+const Config = require('../config');
 
 async function main() {
   const [deployer, operator, thirdAccount] = await hre.ethers.getSigners();
+
+  const RNGFactory = await hre.ethers.getContractFactory("RandomNumberConsumer");
+  const RNG = await RNGFactory.deploy(
+    Config.VRFCoordinator,
+    Config.LINKTToken,
+    Config.KeyHash,
+    hre.ethers.utils.parseEther("0.1"),
+    Config.PokeMe)
+  const TableNFTFactory = await hre.ethers.getContractFactory("TableNFT");
+  const TableNFT = await TableNFTFactory.deploy()
   const library = await hre.ethers.getContractFactory("CasinoLibrary");
   const lib = await library.deploy();
   const casinoFactory = await hre.ethers.getContractFactory("RouletteSpinCasino", {
@@ -9,7 +20,8 @@ async function main() {
       CasinoLibrary: lib.address,
     },
   });
-  const Casino = await casinoFactory.deploy();
+  const Casino = await casinoFactory.deploy(RNG.address, TableNFT.address);
+  await TableNFT.setMinter(Casino.address);
   await Casino.mint(deployer.address, 2000);
   await Casino.mint(operator.address, 2000);
   await Casino.mint(thirdAccount.address, 2000);
