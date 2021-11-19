@@ -8,9 +8,13 @@ import { AppComponent } from './app.component';
 //services
 import { Web3Service } from './web3.service'
 
+//directives
+import { HoverHighlightDirective } from './directives/hoverDirective';
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HoverHighlightDirective
   ],
   imports: [
     BrowserModule,
