@@ -100,7 +100,7 @@ export class Web3Service{
     public mint(userAddress: string, amount: number){
         const self: this = this;
         return self.RouletteSpinCasinoInstance.methods.mint(userAddress, amount).send().then((result: any)=>{
-            console.log("mint called by owner of RouletteSpinCasino", result);
+            // console.log("mint called by owner of RouletteSpinCasino", result);
             return result;
         })
     }
@@ -108,7 +108,7 @@ export class Web3Service{
     public publicMint(){
         const self: this = this;
         return self.RouletteSpinCasinoInstance.methods.publicMint().send({from: this.activeAccount}).then((result: any)=>{
-            console.log("publicMint", result);
+            // console.log("publicMint", result);
             return result;
         })
     }
@@ -116,7 +116,7 @@ export class Web3Service{
     public mintTable(amount: number){
         const self: this = this;
         return self.RouletteSpinCasinoInstance.methods.mintTable(amount).send({from:this.activeAccount }).then((result: any)=>{
-            console.log("new table address", result);
+            // console.log("new table address", result);
             return result;
         })
     }
@@ -124,7 +124,7 @@ export class Web3Service{
     public getTables(){
         const self: this = this;
         return self.RouletteSpinCasinoInstance.methods.getTables().call().then((result: any)=>{
-            console.log("all tables", result);
+            // console.log("all tables", result);
             return result;
         })
     }
@@ -132,7 +132,7 @@ export class Web3Service{
     public deposit(fromPlayer: string, amount: number){
         const self: this = this;
         return self.RouletteSpinCasinoInstance.methods.deposit(fromPlayer, amount).send({from:this.activeAccount}).then((result: any)=>{
-            console.log("deposit from player and amount", result);
+            // console.log("deposit from player and amount", result);
             return result;
         })
     }
@@ -140,7 +140,7 @@ export class Web3Service{
     public fund(tableaddress: string, amount: number){
         const self: this = this;
         return self.RouletteSpinCasinoInstance.methods.fund(tableaddress, amount).send({from:this.activeAccount}).then((result: any)=>{
-            console.log("fund table with amount", result);
+            // console.log("fund table with amount", result);
             return result;
         })
     }
@@ -154,7 +154,7 @@ export class Web3Service{
         return self.RouletteSpinCasinoInstance.methods.balanceOf(this.activeAccount).call()
             .then( 
                 function(result: any){
-                    console.log("balanceOf", result);
+                    // console.log("balanceOf", result);
                     return result;
                 }
             )

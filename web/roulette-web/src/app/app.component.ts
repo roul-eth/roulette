@@ -10,6 +10,8 @@ export class AppComponent implements OnInit {
 
   wheel: any;
   resultNumber: number = 0;
+  tokenBalance: number = 0;
+  casinoTablesArray = [];
   // DOm Manipulate wheel spin
   @ViewChild('wheel')
   set wheelRef(v: ElementRef) {
@@ -93,7 +95,7 @@ export class AppComponent implements OnInit {
 
     var numofsecs = this.currentLength - 360 * this.revolutions;
 
-    this.rd.setStyle(this.wheelImg, 'transform', `rotate(${this.currentLength}deg)`)
+    this.rd.setStyle(this.wheel, 'transform', `rotate(${this.currentLength}deg)`)
     // $(".wheel img").css("transform", "rotate(" + this.currentLength + "deg)");
 
     setInterval(()=>{
@@ -111,6 +113,7 @@ export class AppComponent implements OnInit {
   public getAllTables(){
     this.web3.getTables().then((result: any)=>{
       console.log(result);
+      this.casinoTablesArray = result;
     })
   }
 
@@ -128,7 +131,8 @@ export class AppComponent implements OnInit {
 
   public getBalanceOf(){
     this.web3.balanceOf().then((result: any)=>{
-      console.log(result);
+      this.tokenBalance = result;
+      // console.log(result);
     })
   }
 
