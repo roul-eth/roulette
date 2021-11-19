@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 const Web3 = require('web3');
 var Contract = require('web3-eth-contract');
-const $ = require("jquery");
 
 // Import contract abi (json)
 import CasinoLibrary from '../assets/CasinoLibrary.json';
@@ -23,9 +22,9 @@ export class Web3Service{
     public RouletteSpinCasinoInstance: any;
     public CasinoLibraryInstance: any;
 
-    /** this Subject is like a Event fired. When wallet address (account) is changed then this gets fired. 
-    *   we can use something similar to track other events. 
-    */ 
+    /** this Subject is like a Event fired. When wallet address (account) is changed then this gets fired.
+    *   we can use something similar to track other events.
+    */
 
     private accountChangeSubject = new BehaviorSubject<string>("");
     accountChanged = this.accountChangeSubject.asObservable();
@@ -73,7 +72,7 @@ export class Web3Service{
                 // Get the contract instance.
                 // let deployedNetwork = RouletteSpin.networks[self.networkId];
 
-                self.RouletteSpinCasinoInstance = new Contract(RouletteSpin.abi, '0x86Ac9410507DAaeff0cc7827D401a57ed6E328CC');
+                self.RouletteSpinCasinoInstance = new Contract(RouletteSpin.abi, '0x9A3F1D93e36C1A6915B170f910F377A1896C92cB');
 
                 console.log("Roulette Instance: ",self.RouletteSpinCasinoInstance);
 
@@ -81,7 +80,7 @@ export class Web3Service{
                 //     function(result: any){
                 //         console.log("balanceOf", result);
                 //         return result;
-                //     } 
+                //     }
                 // )
 
                 // self.CasinoLibraryInstance = new Web3Contract(CasinoLibrary.abi, '0x922FB30799FeA1A6992554Bc3d5991cB13665FEf');
@@ -144,15 +143,16 @@ export class Web3Service{
             return result;
         })
     }
-    
+
     public async balanceOf(){
         const self: this = this;
         // const result = await  self.RouletteSpinCasinoInstance.methods.balanceOf(this.activeAccount).send({from:this.activeAccount});
 
         // return result;
 
+      console.log({contract: self.RouletteSpinCasinoInstance, account: this.activeAccount});
         return self.RouletteSpinCasinoInstance.methods.balanceOf(this.activeAccount).call()
-            .then( 
+            .then(
                 function(result: any){
                     // console.log("balanceOf", result);
                     return result;

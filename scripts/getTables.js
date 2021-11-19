@@ -13,12 +13,17 @@ async function main() {
   await Casino.mint(deployer.address, 2000);
   await Casino.mint(operator.address, 2000);
   await Casino.mint(thirdAccount.address, 2000);
-  const transaction = await Casino.mintTable(10);
-  const result = await transaction.wait();
-  console.log(JSON.stringify(result, null, 2));
-  const tableEvent = result.events.find(e => e.event === undefined);
-  const tableAddress = tableEvent.address;
-  console.log({tableAddress});
+  const transactions = [
+    await Casino.mintTable(10),
+    await Casino.mintTable(10),
+    await Casino.mintTable(10),
+    await Casino.mintTable(10),
+    await Casino.mintTable(10),
+    await Casino.mintTable(10)
+  ];
+  await Promise.all(transactions.map(t => t.wait()));
+  const tables = await Casino.getTables();
+  console.log({tables});
 }
 
 main()

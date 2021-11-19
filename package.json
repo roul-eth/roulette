@@ -1,9 +1,9 @@
 {
   "name": "hardhat-project",
   "scripts": {
-    "deploy": "hardhat run --network development scripts/deploy.js",
+    "deploy": "hardhat run --network local scripts/deploy.js",
     "compile": "hardhat compile",
-    "console": "hardhat console --network development",
+    "console": "hardhat console --network local",
     "test": "hardhat test"
   },
   "devDependencies": {
