@@ -34,20 +34,18 @@ export class SplashScreenComponent implements OnInit {
     private hideSplashScreen(){
         // Setting the transition
         this.splashTransition = `opacity ${this.ANIMATION_DURATION}s`;
-        this.opacityChange = 0;
         setTimeout(() => {
             // After the transition is ended the showSplash will be hided
-            this.showSplash = !this.showSplash;
+            this.showSplash = false;
             console.log("showSplash: ", this.showSplash)
         }, 1000);
     }
 
     private showSplashScreen(){
         this.splashTransition = `opacity ${this.ANIMATION_DURATION}s`;
-        this.opacityChange = .9;
         setTimeout(() => {
             // After the transition is ended the showSplash will be hided
-            this.showSplash = !this.showSplash;
+            this.showSplash = true;
         }, 1000);
     }
 }

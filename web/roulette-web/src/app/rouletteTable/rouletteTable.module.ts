@@ -7,6 +7,7 @@ import { RouletteTableComponent } from './rouletteTable.component';
 //directives
 import { HoverHighlightDirective } from '../directives/hoverDirective';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [

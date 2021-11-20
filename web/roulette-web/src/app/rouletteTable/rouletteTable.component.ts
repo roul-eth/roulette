@@ -1,6 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from "@angular/core";
+
 import { Web3Service } from "../web3.service";
 import { SplashScreenService } from '../splashScreen/splashscreen.service';
+import { Router } from "@angular/router";
 
 
 @Component({
@@ -51,18 +53,24 @@ export class RouletteTableComponent implements OnInit {
   constructor(
     private rd: Renderer2,
     private web3: Web3Service,
-    private splashscreen: SplashScreenService){}
+    private splashscreen: SplashScreenService,
+    private route: Router){}
 
   ngOnInit() {
     // $(".wheel img").css("transform", "rotate(" + this.perfecthalf + "deg)");
     setTimeout(()=>{
       console.log("SplashScreem stop")
       this.splashscreen.stop();
-    }, 5000);
+    }, 10);
   }
 
   ngOnDestroy(){
-    this.splashscreen.start();
+    // this.splashscreen.start();
+    console.log("Roulette Table Destroyed")
+  }
+
+  back(): void{
+    this.route.navigate([".."]);
   }
 
   public getRandomInt(min:any, max:any) {

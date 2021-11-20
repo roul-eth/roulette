@@ -40,6 +40,10 @@ export class RouletteMainComponent implements OnInit {
     }, 1000);
   }
 
+  ngOnDestroy() {
+    console.log("Roulette Main Destroyed")
+  }
+
   public web3Changed(connected: boolean){
     if(connected){
       this.connectedToMetaMask = true;
