@@ -7,9 +7,18 @@ interface IRNC {
     /**
      * Requests randomness for a given lottery id
      */
-    function getRoundRandomness(uint _roundId) external view returns (uint256);
-    function getRandomNumber() external;
+    function getRoundRandomness(uint256 _roundId)
+        external
+        view
+        returns (uint256);
+
+    function updateGameState() external;
+
     function setBetsPresent() external;
+
     function setTable(address tableAddress) external;
-    function getCurrentRound() external view returns(uint256);
+
+    function getCurrentRound() external view returns (uint256);
+
+    function getLastExecuted() external view returns (uint256);
 }

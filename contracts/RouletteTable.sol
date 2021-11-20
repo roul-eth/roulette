@@ -11,8 +11,9 @@ contract RouletteTable {
     CasinoLibrary.TableStatus public tableStatus;
     mapping(uint256 => CasinoLibrary.Round) internal roundsHistory;
     uint256 internal currentRound;
+    uint8 internal betWindow = 120; // seconds after last RNG call to allow betting
 
-    uint[] drawings;
+    uint256[] drawings;
     mapping(uint256 => CasinoLibrary.Bet) public currentBets;
 
     IRNC randomNumberConsumer;
@@ -23,7 +24,11 @@ contract RouletteTable {
         _;
     }
 
-    constructor(address _operator, address casinoAddress, address rncAddress) {
+    constructor(
+        address _operator,
+        address casinoAddress,
+        address rncAddress
+    ) {
         operator = _operator;
         casino = IRouletteSpinCasino(casinoAddress);
         randomNumberConsumer = IRNC(rncAddress);
@@ -33,7 +38,11 @@ contract RouletteTable {
         casino.deposit(msg.sender, amount);
     }
 
-    function getBets(uint256 roundId) public view returns (CasinoLibrary.Bet[] memory) {
+    function getBets(uint256 roundId)
+        public
+        view
+        returns (CasinoLibrary.Bet[] memory)
+    {
         CasinoLibrary.Bet[] memory bets;
         if (roundId == 0) {
             roundId = randomNumberConsumer.getCurrentRound();
@@ -44,9 +53,23 @@ contract RouletteTable {
         return bets;
     }
 
+    // function to provide info to the UI
+    function roundsInfo() public view {
+        //get the current round
+        uint256 currentRoundId = randomNumberConsumer.getCurrentRound();
+        // get last round info
+        CasinoLibrary.Round memory lastRound = roundsHistory[currentRoundId];
+    }
+
     function bet(CasinoLibrary.Bet[] memory bets) public {
+        require(
+            randomNumberConsumer.getLastExecuted() + betWindow >
+                block.timestamp,
+            "Bets closed"
+        );
         randomNumberConsumer.setBetsPresent();
         uint256 roundId = randomNumberConsumer.getCurrentRound();
+        // what was the idea to use "initilized"? It's not used anywhere
         if (!roundsHistory[roundId].initialized) {
             roundsHistory[roundId].initialized = true;
         }
@@ -55,23 +78,23 @@ contract RouletteTable {
         uint256 betCount = roundsHistory[roundId].betCount;
         for (uint8 i = 0; i < bets.length; i++) {
             require(bets[i].amount > 0, "You can't bet zero");
-            require(bets[i].from == msg.sender, "Did you just try to bet for someone else?");
-            CasinoLibrary.RouletteBettingSlot memory rbs = CasinoLibrary.RBS(bets[i].betId);
+            CasinoLibrary.RouletteBettingSlot memory rbs = CasinoLibrary.RBS(
+                bets[i].betId
+            );
             currentMaxPayout += bets[i].amount * (rbs.payoutMultiplier - 1);
             total += bets[i].amount;
-            roundsHistory[roundId].bets[i + betCount].from = bets[i].from;
+            roundsHistory[roundId].bets[i + betCount].from = msg.sender;
             roundsHistory[roundId].bets[i + betCount].amount = bets[i].amount;
             roundsHistory[roundId].bets[i + betCount].betId = bets[i].betId;
         }
-        require(currentMaxPayout + roundsHistory[roundId].maxPayout <= casino.balanceOf(address(this)), "We can't afford to pay you if you win");
+        require(
+            currentMaxPayout + roundsHistory[roundId].maxPayout <=
+                casino.balanceOf(address(this)),
+            "We can't afford to pay you if you win"
+        );
         casino.bet(msg.sender, total);
         roundsHistory[roundId].betCount += bets.length;
         roundsHistory[roundId].betsAmount += total;
         roundsHistory[roundId].maxPayout += currentMaxPayout;
-    }
-
-    function getRoundResult(uint _roundId) public view returns (uint8) {
-        uint256 draw = randomNumberConsumer.getRoundRandomness(_roundId);
-        return uint8(uint256(keccak256(abi.encodePacked(draw, address (this)))) % 37);
     }
 }
