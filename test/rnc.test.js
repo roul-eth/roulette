@@ -72,7 +72,7 @@ describe("Random Number Generator", () => {
     ]);
     expect(await RandomNumberConsumer.getCurrentRound()).to.equal(1);
     const roundResult = await Table.getRoundResult(0);
-  });
+  );
 })
 
 after(() => {

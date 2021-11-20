@@ -10,12 +10,12 @@ const {
   deployNFT,
   deployCasino,
   deployGelatoMock
-} = require('../scripts/deploy.js');
+} = require('../utils/deployments.js');
 
 async function main() {
 
   const GelatoMock = await deployGelatoMock();
-  const RandomNumberConsumer = await deployRNC(GelatoMock.address);
+  const RandomNumberConsumer = await deployRNC(GelatoMock);
   const TableNFT = await deployNFT();
   const CasinoLibrary = await deployLibrary();
   const RouletteSpinCasino = await deployCasino({

@@ -18,7 +18,8 @@ const deployRNC = async (GelatoMock) => {
     GelatoMock?.address ?? Config.PokeMe,
     true
   );
-  await GelatoMock?.setRNC(RandomNumberConsumer.address);
+  if (GelatoMock !== undefined)
+    await GelatoMock?.setRNC(RandomNumberConsumer.address);
   /**
    * Verify the contract on etherscan
 
