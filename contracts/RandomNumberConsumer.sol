@@ -121,11 +121,6 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
         require(RNGPending == true, "No RNG pending");
         history[currentRound] = randomness;
 
-        currentRound++;
-
-        betsPresent = false;
-        RNGPending = false;
-
         emit ResponseReceived(currentRound, requestId);
     }
 

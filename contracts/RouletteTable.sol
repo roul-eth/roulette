@@ -38,33 +38,36 @@ contract RouletteTable {
         casino.deposit(msg.sender, amount);
     }
 
-    function getBets(uint256 roundId)
-        public
-        view
-        returns (CasinoLibrary.Bet[] memory)
-    {
-        CasinoLibrary.Bet[] memory bets;
-        if (roundId == 0) {
-            roundId = randomNumberConsumer.getCurrentRound();
-        }
-        for (uint256 i = 0; i < roundsHistory[roundId].betCount; i++) {
-            bets[i] = currentBets[i];
-        }
-        return bets;
+    function getBets(uint256 roundId) public view returns (CasinoLibrary.Bet[] memory) {
+        return roundsHistory[roundId].bets;
     }
 
     // function to provide info to the UI
-    function roundsInfo() public view {
+    function roundsInfo() public view returns (uint,uint, uint8, uint) {
         //get the current round
         uint256 currentRoundId = randomNumberConsumer.getCurrentRound();
+
         // get last round info
-        CasinoLibrary.Round memory lastRound = roundsHistory[currentRoundId];
+        uint lastRound = roundsHistory[currentRoundId].id;
+        uint8 draw = uint8(randomNumberConsumer.getRoundRandomness(lastRound) % 37);
+        uint payoutTotal;
+
+        CasinoLibrary.Bet[] memory bets = getBets(lastRound);
+        for (uint256 j = 0; j < bets.length; j++) {
+            CasinoLibrary.Bet memory playerBet = bets[j];
+            if(playerBet.from == msg.sender) {
+                uint8 payout = CasinoLibrary.isWinningBet(playerBet.betId,draw);
+                payoutTotal += payout * playerBet.amount;
+            }
+        }
+       
+       return (randomNumberConsumer.getLastExecuted(), lastRound, draw, payoutTotal);
+       
     }
 
     function bet(CasinoLibrary.Bet[] memory bets) public {
         require(
-            randomNumberConsumer.getLastExecuted() + betWindow >
-                block.timestamp,
+            ((randomNumberConsumer.getLastExecuted() + betWindow > block.timestamp) || (randomNumberConsumer.getLastExecuted() == 0)),
             "Bets closed"
         );
         randomNumberConsumer.setBetsPresent();
@@ -75,7 +78,7 @@ contract RouletteTable {
         }
         uint256 total = 0;
         uint256 currentMaxPayout = 0;
-        uint256 betCount = roundsHistory[roundId].betCount;
+        
         for (uint8 i = 0; i < bets.length; i++) {
             require(bets[i].amount > 0, "You can't bet zero");
             CasinoLibrary.RouletteBettingSlot memory rbs = CasinoLibrary.RBS(
@@ -83,9 +86,8 @@ contract RouletteTable {
             );
             currentMaxPayout += bets[i].amount * (rbs.payoutMultiplier - 1);
             total += bets[i].amount;
-            roundsHistory[roundId].bets[i + betCount].from = msg.sender;
-            roundsHistory[roundId].bets[i + betCount].amount = bets[i].amount;
-            roundsHistory[roundId].bets[i + betCount].betId = bets[i].betId;
+            bets[i].from = msg.sender;
+            roundsHistory[roundId].bets.push(bets[i]);
         }
         require(
             currentMaxPayout + roundsHistory[roundId].maxPayout <=
