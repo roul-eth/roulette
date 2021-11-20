@@ -34,7 +34,21 @@ export const environment = {
   tableNFTInstance: '${TableNFT.address}'
 };
   `;
-  await fs.promises.writeFile(path.join('.', 'web', 'roulette-web', 'src', 'environments', 'environment.hardhat.ts'), envFile);
+  const webPath = path.join('.', 'web', 'roulette-web', 'src');
+  await fs.promises.writeFile(path.join(webPath, 'environments', 'environment.hardhat.ts'), envFile);
+  const artifactsPath = path.join('.', 'artifacts', 'contracts');
+  const webAssetPath = path.join(webPath, 'assets');
+  const contractsAbiFolders = await fs.promises.readdir(artifactsPath);
+  const copying = [];
+  for (const folder of contractsAbiFolders) {
+    if (!/\.sol$/.test(folder)) continue;
+    const contractAbiName = folder.split('.').slice(0, -1).join('.') + '.json';
+    copying.push(fs.promises.copyFile(
+      path.join(artifactsPath, folder, contractAbiName),
+      path.join(webAssetPath, contractAbiName)
+    ));
+  }
+  await Promise.all(copying);
 }
 
 main()
