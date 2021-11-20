@@ -7,7 +7,7 @@
       <button [disabled]="!connectedToMetaMask" (click)="getBalanceOf()">Balance Of</button>
     </div>
     <div class="col">
-      <span>{{tokenBalance}}</span>
+      <span>{{web3.tokenBalance}}</span>
     </div>
     <div class="col">
       <input [disabled]="!connectedToMetaMask" type="number" [(ngModel)]="mintTableAmount">
