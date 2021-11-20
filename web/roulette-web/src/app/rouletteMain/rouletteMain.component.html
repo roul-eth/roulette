@@ -1,0 +1,25 @@
+<div class="container body">
+  <div class="row userDets">
+    <div class="col">
+      <button [disabled]="!connectedToMetaMask" (click)="callPublicMint()">Public Mint</button>
+    </div>
+    <div class="col">
+      <button [disabled]="!connectedToMetaMask" (click)="getBalanceOf()">Balance Of</button>
+    </div>
+    <div class="col">
+      <span>{{tokenBalance}}</span>
+    </div>
+    <div class="col">
+      <input [disabled]="!connectedToMetaMask" type="number" [(ngModel)]="mintTableAmount">
+      <button [disabled]="!connectedToMetaMask" (click)="mintTable()">Mint Table</button>
+    </div>
+    <div class="col">
+      <button [disabled]="!connectedToMetaMask" (click)="getAllTables()">Get All Tables</button>
+      <ng-container *ngFor="let add of casinoTablesArray">
+        <button type="button" class="btn btn-info" (click)="connectToTable(add)" >{{add}}</button>
+
+      </ng-container>
+    </div>
+
+  </div>
+</div>

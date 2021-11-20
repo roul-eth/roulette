@@ -15,6 +15,15 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
+task("round", "Triggers the next round")
+  .addParam("gelato", "The GelatoMock address")
+  .setAction(async ({gelato}) => {
+    const GelatoFactory = await hre.ethers.getContractFactory("GelatoMock");
+    const Gelato = await GelatoFactory.attach(gelato);
+    const tx = await Gelato.startNextRound();
+    console.log({tx});
+  });
+
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 

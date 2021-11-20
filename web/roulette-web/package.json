@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "hardhat": "ng serve --configuration=hardhat",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

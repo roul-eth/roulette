@@ -1,8 +1,11 @@
 # Intro
 
 The decentralized roulette project is based on the following contracts, currently deployed on the Rinkeby testnet:
-RNG: Responsible for generating random numbers using Chainlink Verifiable Randomness Function.
-Casino: 
+
+RNC: Responsible for consuming random numbers from Chainlink Verifiable Randomness Function.
+RouletteSpinCasino: ERC20 compatible contract that allows for minting roulette tables
+RouletteTable: Deployed by the RouletteSpinCasino while setting owner
+TableNFT: Minting of the table's NFT, used for access control inside the RouletteTable and exchangeable just like any NFT
 
 # Setup
 
@@ -20,7 +23,7 @@ It will check the address for each contract on the contracts.js file. If it is n
 The script will automatically publish/verify the contract code using the etherscan plugin.
 
 
-# Angular 6 Frontend:
+# Angular 13 Frontend:
 
   # Setup:
     npm install  - 
