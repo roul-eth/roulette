@@ -30,3 +30,6 @@ cache
 artifacts
 
 web/roulette-web/src/assets/
+web/roulette-three-js/assets/.DS_Store
+.gitignore
+.vscode/settings.json

@@ -1,0 +1,79 @@
+
+
+Structure of project:
+
+  Important note's:
+
+  - In /assets/complex/ Use chip1.blend to make 3d object edit and export to
+  .gltf format. This file is not in active part of application.
+  /assets/complex/chip1.gltf is file loaded intro web app.
+  Also used gltf loader for /assets/decorations/ ...
+  and \assets\wheel-roll\center\centerRoll.gltf
+  CenterRoll downloaded from http://www.blendswap.com/blends/view/72520
+  and taken only one part.
+  In readme.md you have licence just leave it to make legal use.
+
+- assets/fonts/helvetiker_regular.typeface.json comes from three.js see docs.
+  It is a 3d text shema not classic web font for regular DOM.
+- /scripts/bet-map/bet-map.js is handler for beting system.
+  Most important is betMapCurrentBets.getWinningValue(winNumber) You need first to know
+  winning number than use it.
+- Chips image used in app is located at:
+  - tag 128 indicate size 128x128.
+  \assets\complex\chips-128\chip1.png
+  Other chips images in folder table is only src with better size.
+
+- You need to follow function `setWinningNumber` from roulette-table.js to make sence
+  about flow in this project. It is a interest moment.
+
+  application.js is main startup file.
+  Use object `app` to save some parameters if you need it.
+
+  In folder /scripts/libs/ most important file is `cannon.engine.js`.
+  Please see cannon.js docs for more information.
+
+It is a clear javascript custom methodology in most simpliest way.
+I use procedural aspect started from application.js. In all scripts i
+use simple function call for example :
+  - removeNoWinChips()
+  - removeAllPhisicsChips()
+  - removeAllChips()
+It is very descriptively with one basic programming role `single responsibility`.
+
+
+[Not in use] Actually not in use but can be implemented if you have different idea.
+[Formats - js, html ...]
+
+├── Root/
+|   ├── assets/
+|   |   └── audios/  [Formats .mp3, .ogg] Fix all modern browsers
+|   |   └── complex/ [Formats .gltf, .blend]
+|   |   └── control-btns/ [Formats .png, .xcf - Gimp source file]
+|   |   └── decorations/  [Formats .gltf, .blend]
+|   |   └── fonts/   [Formats .json]
+|   |   └── ground/  [Formats .jpg]
+|   |   └── table/   [Formats .jpg, .png]
+|   |   └── wheel-roll/  [Formats .png, .gltf]
+|   ├── css/
+|   |   └── style.css
+|   ├── imgs/
+|   |   └── icons/favicon.ico
+|   ├── scripts/
+|   |   └── bet-map
+|   |      └── bet-map.js
+|   |   └── libs/
+|   |   └── audios.js
+|   |   └── ball.js
+|   |   └── center-roll.js
+|   |   └── chips.js
+|   |   └── init.js
+|   |   └── lights.js
+|   |   └── pointerCheck.js - [Not in use]
+|   |   └── pointerLockControls.js - [Not in use]
+|   |   └── roulette-table.js [Handling raycast - detecting click object]
+|   |   └── text.js [Handling 3d text - Credits]
+|   |   └── wheel.js [Static wheel part]
+|   |   └── wheelRoll.js [Rotation system part]
+|   ├── index.html
+|   ├── manifest.web (improve PWA)
+
