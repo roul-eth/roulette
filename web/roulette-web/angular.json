@@ -40,6 +40,27 @@
             ]
           },
           "configurations": {
+            "hardhat": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "4mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.hardhat.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
             "production": {
               "budgets": [
                 {
@@ -77,6 +98,9 @@
           "configurations": {
             "production": {
               "browserTarget": "roulette-web:build:production"
+            },
+            "hardhat": {
+              "browserTarget": "roulette-web:build:hardhat"
             },
             "development": {
               "browserTarget": "roulette-web:build:development"

@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
+import { RouletteTableComponent } from './rouletteTable/rouletteTable.component'
+import { RouletteMainComponent } from './rouletteMain/rouletteMain.component'
 
+const routes: Routes = [
+  {path: '', component: RouletteMainComponent},
+  {path: 'rouletteTable/:id', component: RouletteTableComponent}
 ];
 
 @NgModule({

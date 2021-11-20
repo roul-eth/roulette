@@ -1,33 +1,45 @@
 /**by Dinesh Selvam -  PheoDScop#3470*/
-import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
+import { environment } from '../environments/environment';
+
 const Web3 = require('web3');
 var Contract = require('web3-eth-contract');
 
-// Import contract abi (json)
+/**
+ * Import contract abi (json) from
+ * Casino Library, TableNFT
+ * RandomNumberConsumer, RouleteeSpinCasino, RouletteTable
+*/
 import CasinoLibrary from '../assets/CasinoLibrary.json';
-import RouletteSpin from '../assets/RouletteSpinCasino.json';
+import RandomNumberConsumer from '../assets/RandomNumberConsumer.json';
+import RouletteSpinCasino from '../assets/RouletteSpinCasino.json';
+import RouletteTable from '../assets/RouletteTable.json';
+import TableNFT from '../assets/TableNFT.json';
 
 declare let require: any;
 declare let window: any;
 
-export class Web3Service{
-    private web3: any;
+export class Web3Service {
+    // web3 provider vars
+    private readonly web3: any;
     private chainId: any;
     private networkId: any;
-    // private contracts: {};
-    public activeAccount: any; // tracks what account address is currently used.
-    public accounts = []; // metamask or other accounts
 
-    public RouletteSpinCasinoInstance: any;
-    public CasinoLibraryInstance: any;
+    public activeAccount: any; // tracks what account address is currently used.
+    public accounts = []; // metamask or other accounts address
+
+
+    public RandomNumberInstance: any;
+    public RouletteSpinInstance: any;
+    public RouletteTableInstance: any;
+    public TableNftInstance: any;
 
     /** this Subject is like a Event fired. When wallet address (account) is changed then this gets fired.
     *   we can use something similar to track other events.
     */
-
     private accountChangeSubject = new BehaviorSubject<string>("");
     accountChanged = this.accountChangeSubject.asObservable();
+
 
     constructor(){
         if(window.ethereum === undefined){
@@ -35,15 +47,34 @@ export class Web3Service{
         } else {
             if (typeof window.web3 !== 'undefined') {
                 this.web3 = window.web3.currentProvider;
-                console.log('EthService :: constructor :: window.web3 is set');
+                console.log('Constructor :: window.web3 - Metamask is set');
             } else {
                 this.web3 = new Web3.providers.HttpProvider('http://localhost:7545');
-                console.log('EthService :: constructor :: window.ethereum web3 http provider set');
+                console.log('Constructor :: window.ethereum web3 HTTP provider set');
             }
-            console.log('Web3Service :: constructor :: this.web3');
             console.log(this.web3);
             window.web3 = new Web3(window.ethereum);
             Contract.setProvider(this.web3);
+        }
+    }
+
+    public accountChecker(){
+        const self: this = this;
+
+        return setInterval(function () {
+            if (self.activeAccount != window.web3.currentProvider.selectedAddress) {
+                self.updateActiveAccount();
+            }
+        }, 100);
+    }
+
+    public updateActiveAccount() {
+
+        if(window.web3.currentProvider.selectedAddress !== undefined){
+            this.activeAccount = window.web3.currentProvider.selectedAddress;
+            this.accountChangeSubject.next(window.web3.currentProvider.selectedAddress);
+        }else{
+            // call disconnected subject
         }
     }
 
@@ -58,33 +89,32 @@ export class Web3Service{
             method: 'net_version'
         });
 
-        console.log("Chain ID: " + self.chainId + ", network ID: " + self.networkId)
-
         await window.ethereum.request({method: 'eth_requestAccounts'}).then((data: any)=>{
             console.log("accounts", data);
             this.activeAccount = data[0];
+
+            console.log("selected add ", window.web3.currentProvider.selectedAddress);
+
+            //set up Behaviour Subject to detect changes to connected account.
+            self.accountChangeSubject.next(window.web3.currentProvider.selectedAddress);
+
+            self.accountChecker();
+
         }).catch((err: any)=>{
             console.log("Account Request failed", err);
         }).then(()=>{
 
             // read contract abi
             try {
-                // Get the contract instance.
-                // let deployedNetwork = RouletteSpin.networks[self.networkId];
 
-                self.RouletteSpinCasinoInstance = new Contract(RouletteSpin.abi, '0x9A3F1D93e36C1A6915B170f910F377A1896C92cB');
+                self.RandomNumberInstance = new Contract(RandomNumberConsumer.abi, environment.rncInstance);
+                console.log("RandomNumberInstance: ",self.RandomNumberInstance);
 
-                console.log("Roulette Instance: ",self.RouletteSpinCasinoInstance);
+                self.RouletteSpinInstance = new Contract(RouletteSpinCasino.abi, environment.casinoInstance);
+                console.log("RouletteSpinInstance: ",self.RouletteSpinInstance);
 
-                // self.RouletteSpinCasinoInstance.methods.balanceOf(self.activeAccount).call().then(
-                //     function(result: any){
-                //         console.log("balanceOf", result);
-                //         return result;
-                //     }
-                // )
-
-                // self.CasinoLibraryInstance = new Web3Contract(CasinoLibrary.abi, '0x922FB30799FeA1A6992554Bc3d5991cB13665FEf');
-                // console.log("CasinoLibrary Instance: ",self.CasinoLibraryInstance);
+                self.TableNftInstance = new Contract(TableNFT.abi, environment.tableNFTInstance);
+                console.log("TableNftInstance: ",self.TableNftInstance);
 
             } catch (error) {
                 // Catch any errors for any of the above operations.
@@ -94,11 +124,40 @@ export class Web3Service{
         });
     }
 
+    public async connectToRouletteTable(address: string) {
+        const self: this = this;
+
+        try {
+            self.RouletteTableInstance = new Contract(RouletteTable.abi, address);
+            console.log("RouletteTableInstance: ",self.RouletteTableInstance);
+
+            return true;
+
+        } catch (error) {
+            // Catch any errors for any of the above operations.
+                alert(`Failed to load RouletteTable abi. Check console for details.`);
+                console.log(error);
+                return false;
+        }
+    }
+
+    /**
+     * RandomNumberConsumer
+     */
+    public subscribeToRandomNumberEvents(){
+        const self: this = this;
+        self.RandomNumberInstance.events.RandomNumberRequest({
+            topics: ['RandomNumberRequest', 'ResponseReceived']
+        }, function(error:any, event:any){
+            console.log(event)
+        })
+    }
+
     /**RouletteSpin Casino methods */
 
     public mint(userAddress: string, amount: number){
         const self: this = this;
-        return self.RouletteSpinCasinoInstance.methods.mint(userAddress, amount).send().then((result: any)=>{
+        return self.RouletteSpinInstance.methods.mint(userAddress, amount).send().then((result: any)=>{
             // console.log("mint called by owner of RouletteSpinCasino", result);
             return result;
         })
@@ -106,7 +165,7 @@ export class Web3Service{
 
     public publicMint(){
         const self: this = this;
-        return self.RouletteSpinCasinoInstance.methods.publicMint().send({from: this.activeAccount}).then((result: any)=>{
+        return self.RouletteSpinInstance.methods.publicMint().send({from: this.activeAccount}).then((result: any)=>{
             // console.log("publicMint", result);
             return result;
         })
@@ -114,7 +173,7 @@ export class Web3Service{
 
     public mintTable(amount: number){
         const self: this = this;
-        return self.RouletteSpinCasinoInstance.methods.mintTable(amount).send({from:this.activeAccount }).then((result: any)=>{
+        return self.RouletteSpinInstance.methods.mintTable(amount).send({from:this.activeAccount }).then((result: any)=>{
             // console.log("new table address", result);
             return result;
         })
@@ -122,7 +181,7 @@ export class Web3Service{
 
     public getTables(){
         const self: this = this;
-        return self.RouletteSpinCasinoInstance.methods.getTables().call().then((result: any)=>{
+        return self.RouletteSpinInstance.methods.getTables().call().then((result: any)=>{
             // console.log("all tables", result);
             return result;
         })
@@ -130,34 +189,47 @@ export class Web3Service{
 
     public deposit(fromPlayer: string, amount: number){
         const self: this = this;
-        return self.RouletteSpinCasinoInstance.methods.deposit(fromPlayer, amount).send({from:this.activeAccount}).then((result: any)=>{
+        return self.RouletteSpinInstance.methods.deposit(fromPlayer, amount).send({from:this.activeAccount}).then((result: any)=>{
             // console.log("deposit from player and amount", result);
             return result;
         })
     }
 
-    public fund(tableaddress: string, amount: number){
+    public getWinningNumber(roundId: number){
         const self: this = this;
-        return self.RouletteSpinCasinoInstance.methods.fund(tableaddress, amount).send({from:this.activeAccount}).then((result: any)=>{
-            // console.log("fund table with amount", result);
-            return result;
+        return self.RouletteSpinInstance.methods.getWinningNumber(roundId).call().then((data: any)=>{
+            return data;
         })
     }
 
     public async balanceOf(){
         const self: this = this;
-        // const result = await  self.RouletteSpinCasinoInstance.methods.balanceOf(this.activeAccount).send({from:this.activeAccount});
-
-        // return result;
-
-      console.log({contract: self.RouletteSpinCasinoInstance, account: this.activeAccount});
-        return self.RouletteSpinCasinoInstance.methods.balanceOf(this.activeAccount).call()
-            .then(
-                function(result: any){
+        console.log({contract: self.RouletteSpinInstance, account: this.activeAccount});
+            return self.RouletteSpinInstance.methods.balanceOf(this.activeAccount).call()
+                .then(
+                    function(result: any){
                     // console.log("balanceOf", result);
                     return result;
-                }
-            )
+                    }
+                )
     }
 
+    /**
+     * Roulette Table
+     */
+
+    public getBets(){
+        const self:this = this;
+        return self.RouletteTableInstance.methods.getBets().call().then((data: any)=>{
+            return data;
+        })
+    }
+
+    // send array of bets to RouletteTable
+    public sendBets(bets: any){
+        const self:this = this;
+        return self.RouletteTableInstance.methods.bet(bets).send({from: this.activeAccount}).then((data: any)=>{
+            return data;
+        })
+    }
 }

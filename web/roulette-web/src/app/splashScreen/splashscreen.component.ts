@@ -22,17 +22,30 @@ export class SplashScreenComponent implements OnInit {
     ngOnInit(){
         this.splashScreenService.subscribe((res:any)=>{
             console.log("Subscribed splashscreen", res)
-            this.hideSplashScreen();
+            if(res){
+                this.showSplashScreen();
+            }else{
+                this.hideSplashScreen();
+            }
+            
         })
     }
 
     private hideSplashScreen(){
         // Setting the transition
         this.splashTransition = `opacity ${this.ANIMATION_DURATION}s`;
-        this.opacityChange = 0;
         setTimeout(() => {
             // After the transition is ended the showSplash will be hided
-            this.showSplash = !this.showSplash;
+            this.showSplash = false;
+            console.log("showSplash: ", this.showSplash)
+        }, 1000);
+    }
+
+    private showSplashScreen(){
+        this.splashTransition = `opacity ${this.ANIMATION_DURATION}s`;
+        setTimeout(() => {
+            // After the transition is ended the showSplash will be hided
+            this.showSplash = true;
         }, 1000);
     }
 }
