@@ -1,25 +1,37 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
 import "./CasinoLibrary.sol";
 import "../interfaces/IRouletteSpinCasino.sol";
+import "../interfaces/IRNC.sol";
 
 contract RouletteTable {
     address public operator; // Owner of the table
 
     CasinoLibrary.TableStatus public tableStatus;
+    mapping(uint256 => CasinoLibrary.Round) roundsHistory;
+    uint256 internal currentRound;
+
+    uint[] drawings;
     mapping(uint256 => CasinoLibrary.Bet) public currentBets;
     uint256 betCount;
     uint256 betsAmount;
     uint256 maxPayout;
 
+    IRNC randomNumberConsumer;
     IRouletteSpinCasino public casino;
 
-    constructor(address _operator,address casinoAddress) {
+    modifier onlyRNC() {
+        require(msg.sender == address(randomNumberConsumer), "Only RNC calls");
+        _;
+    }
+
+    constructor(address _operator, address casinoAddress, address rncAddress) {
         operator = _operator;
         casino = IRouletteSpinCasino(casinoAddress);
+        randomNumberConsumer = IRNC(rncAddress);
     }
-    
+
     function deposit(uint256 amount) public {
         casino.deposit(msg.sender, amount);
     }
@@ -33,7 +45,7 @@ contract RouletteTable {
     }
 
     function bet(CasinoLibrary.Bet[] memory bets) public {
-        require(tableStatus == CasinoLibrary.TableStatus.BetsOpen, "Rien ne va plus");
+        randomNumberConsumer.setBetsPresent();
         uint256 total = 0;
         for (uint8 i = 0; i < bets.length; i++) {
             require(bets[i].amount > 0, "You can't bet zero");
@@ -48,5 +60,8 @@ contract RouletteTable {
         betsAmount += total;
     }
 
-    //function makePayments public
+    function getRoundResult(uint _roundId) public view returns (uint) {
+        uint256 draw = randomNumberConsumer.getRoundRandomness(_roundId);
+        return uint(keccak256(abi.encodePacked(draw, address (this)))) % 37;
+    }
 }

@@ -1,7 +1,14 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
 library CasinoLibrary {
+    struct DrawingDetails {
+        uint256 roundId;
+        uint lastExecuted;
+        uint lastReturned;
+        uint randomNumber;
+    }
+
     struct RouletteBettingSlot {
         uint8[] numbers;
         uint8 payoutMultiplier;
@@ -11,6 +18,12 @@ library CasinoLibrary {
         address from;
         uint256 amount;
         uint8 betId;
+    }
+
+    struct Round {
+        uint256 id;
+        Bet[] bets;
+        uint8 draw;
     }
 
     enum TableStatus {

@@ -4,8 +4,8 @@ const Config = require('../config');
 async function main() {
   const [deployer, operator, thirdAccount] = await hre.ethers.getSigners();
 
-  const RNGFactory = await hre.ethers.getContractFactory("RandomNumberConsumer");
-  const RNG = await RNGFactory.deploy(
+  const RNCFactory = await hre.ethers.getContractFactory("RandomNumberConsumer");
+  const RNC = await RNCFactory.deploy(
     Config.VRFCoordinator,
     Config.LINKTToken,
     Config.KeyHash,
@@ -20,7 +20,7 @@ async function main() {
       CasinoLibrary: lib.address,
     },
   });
-  const Casino = await casinoFactory.deploy(RNG.address, TableNFT.address);
+  const Casino = await casinoFactory.deploy(RNC.address, TableNFT.address);
   await TableNFT.setMinter(Casino.address);
   await Casino.mint(deployer.address, 2000);
   await Casino.mint(operator.address, 2000);
