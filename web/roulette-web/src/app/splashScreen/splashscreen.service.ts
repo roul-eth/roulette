@@ -10,4 +10,7 @@ export class SplashScreenService {
    stop() {
       this.subject.next(false);
    }
+   start() {
+      this.subject.next(true);
+   }
 }

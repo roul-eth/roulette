@@ -48,5 +48,11 @@ module.exports = {
     currency: "USD",
     coinmarketcap: `${process.env.COINMARKETCAP_KEY}`
   }: undefined,
-  networks: parseNetworks(process.env)
+  // networks: parseNetworks(process.env)
+  networks: {
+    development: {
+      url: `http://127.0.0.1:7545`,
+      accounts: [`85cedcb9661a29cfa8f80ab535a45ec3fdce31e55ad69a21faee0051cbf1f547`],
+    }
+  }
 };

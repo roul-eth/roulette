@@ -1,5 +1,5 @@
 .app-splash-screen {
-    background: #3a36d1;
+    background: rgb(0 0 0 / 90%);
     position: fixed;
     top: 0;
     left: 0;
@@ -27,8 +27,51 @@
     color: #fff;
     animation: loading 8s linear;
  }
- @keyframes loading {
-    0% {
-       max-width: 0;
+
+ img{
+    width: 670px;
+ }
+
+ .rotate {
+   -webkit-animation: rotation 10s infinite linear;
+   -moz-animation: rotation 10s infinite linear;
+   -ms-animation: rotation 10s infinite linear;
+   -o-animation: rotation 10s infinite linear;
+   animation: rotation 10s infinite linear;
+   animation: rotation 10s infinite linear; 
+ }
+
+@-moz-keyframes rotation{
+   from {
+      transform: rotate3d(0, 0, 1, 0deg);
     }
+    to {
+      transform: rotate3d(0, 0, 1, 360deg);
+    }
+}
+
+@-webkit-keyframes rotation{
+   from {
+      transform: rotate3d(0, 0, 1, 0deg);
+    }
+    to {
+      transform: rotate3d(0, 0, 1, 360deg);
+    }
+}
+@-o-keyframes rotation{
+   from {
+      transform: rotate3d(0, 0, 1, 0deg);
+    }
+    to {
+      transform: rotate3d(0, 0, 1, 360deg);
+    }
+}
+@keyframes rotation {
+   //  0% { max-width: 0; }
+   from {
+     transform: rotate3d(0, 0, 1, 0deg);
+   }
+   to {
+     transform: rotate3d(0, 0, 1, 360deg);
+   }
  }
