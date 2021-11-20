@@ -28,6 +28,8 @@ export class Web3Service {
     public activeAccount: any; // tracks what account address is currently used.
     public accounts = []; // metamask or other accounts address
 
+    public tokenBalance: number = 0;
+
 
     public RandomNumberInstance: any;
     public RouletteSpinInstance: any;
@@ -70,10 +72,13 @@ export class Web3Service {
 
     public updateActiveAccount() {
 
-        if(window.web3.currentProvider.selectedAddress !== undefined){
+        if(window.web3.currentProvider.selectedAddress !== null){
             this.activeAccount = window.web3.currentProvider.selectedAddress;
+            //change of account ==> update all pages and go back to main. 
             this.accountChangeSubject.next(window.web3.currentProvider.selectedAddress);
         }else{
+            this.activeAccount = '';
+            this.accountChangeSubject.next("");
             // call disconnected subject
         }
     }
@@ -205,13 +210,14 @@ export class Web3Service {
     public async balanceOf(){
         const self: this = this;
         console.log({contract: self.RouletteSpinInstance, account: this.activeAccount});
+        if(self.RouletteSpinInstance !== undefined && this.activeAccount !== ''){
             return self.RouletteSpinInstance.methods.balanceOf(this.activeAccount).call()
                 .then(
                     function(result: any){
-                    // console.log("balanceOf", result);
-                    return result;
+                    self.tokenBalance = result;
                     }
-                )
+                )   
+        }
     }
 
     /**
