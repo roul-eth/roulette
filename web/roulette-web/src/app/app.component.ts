@@ -8,7 +8,7 @@ import { SplashScreenService } from './splashScreen/splashscreen.service';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnInit{
-  
+
   connectedToMetaMask: boolean = false;
 
   ngOnInit() {

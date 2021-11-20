@@ -22,7 +22,11 @@ library CasinoLibrary {
 
     struct Round {
         uint256 id;
+        bool initialized;
         Bet[] bets;
+        uint256 betCount;
+        uint256 betsAmount;
+        uint256 maxPayout;
         uint8 draw;
     }
 

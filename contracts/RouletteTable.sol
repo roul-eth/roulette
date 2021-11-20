@@ -9,14 +9,11 @@ contract RouletteTable {
     address public operator; // Owner of the table
 
     CasinoLibrary.TableStatus public tableStatus;
-    mapping(uint256 => CasinoLibrary.Round) roundsHistory;
+    mapping(uint256 => CasinoLibrary.Round) internal roundsHistory;
     uint256 internal currentRound;
 
     uint[] drawings;
     mapping(uint256 => CasinoLibrary.Bet) public currentBets;
-    uint256 betCount;
-    uint256 betsAmount;
-    uint256 maxPayout;
 
     IRNC randomNumberConsumer;
     IRouletteSpinCasino public casino;
@@ -36,9 +33,12 @@ contract RouletteTable {
         casino.deposit(msg.sender, amount);
     }
 
-    function getBets() public view returns (CasinoLibrary.Bet[] memory) {
+    function getBets(uint256 roundId) public view returns (CasinoLibrary.Bet[] memory) {
         CasinoLibrary.Bet[] memory bets;
-        for (uint256 i = 0; i < betCount; i++) {
+        if (roundId == 0) {
+            roundId = randomNumberConsumer.getCurrentRound();
+        }
+        for (uint256 i = 0; i < roundsHistory[roundId].betCount; i++) {
             bets[i] = currentBets[i];
         }
         return bets;
@@ -46,22 +46,32 @@ contract RouletteTable {
 
     function bet(CasinoLibrary.Bet[] memory bets) public {
         randomNumberConsumer.setBetsPresent();
+        uint256 roundId = randomNumberConsumer.getCurrentRound();
+        if (!roundsHistory[roundId].initialized) {
+            roundsHistory[roundId].initialized = true;
+        }
         uint256 total = 0;
+        uint256 currentMaxPayout = 0;
+        uint256 betCount = roundsHistory[roundId].betCount;
         for (uint8 i = 0; i < bets.length; i++) {
             require(bets[i].amount > 0, "You can't bet zero");
             require(bets[i].from == msg.sender, "Did you just try to bet for someone else?");
             CasinoLibrary.RouletteBettingSlot memory rbs = CasinoLibrary.RBS(bets[i].betId);
-            maxPayout += bets[i].amount * (rbs.payoutMultiplier - 1);
+            currentMaxPayout += bets[i].amount * (rbs.payoutMultiplier - 1);
             total += bets[i].amount;
-            currentBets[betCount++] = bets[i];
+            roundsHistory[roundId].bets[i + betCount].from = bets[i].from;
+            roundsHistory[roundId].bets[i + betCount].amount = bets[i].amount;
+            roundsHistory[roundId].bets[i + betCount].betId = bets[i].betId;
         }
-        require(total <= casino.balanceOf(msg.sender), "Don't bet more than you can afford");
-        require(maxPayout <= casino.balanceOf(address(this)), "We can't afford to pay you if you win");
-        betsAmount += total;
+        require(currentMaxPayout + roundsHistory[roundId].maxPayout <= casino.balanceOf(address(this)), "We can't afford to pay you if you win");
+        casino.bet(msg.sender, total);
+        roundsHistory[roundId].betCount += bets.length;
+        roundsHistory[roundId].betsAmount += total;
+        roundsHistory[roundId].maxPayout += currentMaxPayout;
     }
 
-    function getRoundResult(uint _roundId) public view returns (uint) {
+    function getRoundResult(uint _roundId) public view returns (uint8) {
         uint256 draw = randomNumberConsumer.getRoundRandomness(_roundId);
-        return uint(keccak256(abi.encodePacked(draw, address (this)))) % 37;
+        return uint8(uint256(keccak256(abi.encodePacked(draw, address (this)))) % 37);
     }
 }

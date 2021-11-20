@@ -11,4 +11,5 @@ interface IRNC {
     function getRandomNumber() external;
     function setBetsPresent() external;
     function setTable(address tableAddress) external;
+    function getCurrentRound() external view returns(uint256);
 }

@@ -53,11 +53,9 @@ contract RouletteSpinCasino is IRouletteSpinCasino, ERC20, ERC20Burnable, Ownabl
         _transfer(fromPlayer, msg.sender, amount);
     }
     
-    function fund(address toTable, uint256 amount) public {
-        require(_isTable[toTable], "Only roulette tables can be funded");
-        RouletteTable table = RouletteTable(toTable);
-        require(table.operator() == msg.sender, "That's not your table");
-        _transfer(msg.sender, toTable, amount);
+    function bet(address fromPlayer, uint256 amount) public {
+        require(_isTable[msg.sender], "Only roulette tables can call this method");
+        _transfer(fromPlayer, msg.sender, amount);
     }
 
 }

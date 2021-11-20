@@ -1,5 +1,8 @@
 const { expect, assert } = require("chai");
+const { soliditySha3 } = require("web3-utils");
+const { randomBytes } = require('crypto');
 const HardHat = require("hardhat");
+const { BigNumber } = require('@ethersproject/bignumber');
 const {
   deployLibrary,
   deployRNC,
@@ -47,7 +50,7 @@ describe("Random Number Generator", () => {
   it('Cannot start next round if there are no bets', async () => {
     const expectedError = `VM Exception while processing transaction: reverted with reason string 'Bets must be present to request RNG'`;
     try {
-      const [_, random] = await Promise.all([
+      await Promise.all([
         GelatoMock.startNextRound(),
         MockChainLink.waitForRandomNumber()
       ]);
@@ -65,14 +68,24 @@ describe("Random Number Generator", () => {
       ]
     ]);
     expect(await RandomNumberConsumer.getCurrentRound()).to.equal(0);
-    MockChainLink.forceNextRandomNumber(7);
-    const [_, random] = await Promise.all([
+    await Promise.all([
       GelatoMock.startNextRound(),
       MockChainLink.waitForRandomNumber()
     ]);
     expect(await RandomNumberConsumer.getCurrentRound()).to.equal(1);
-    const roundResult = await Table.getRoundResult(0);
-  );
+    const roundResult = await Table.getRoundResult(1);
+    expect(roundResult).to.equal(expectedTableDraw);
+  });
+
+  it('Successfully computes that single number bet is losing', async () => {
+    const nextNumber = 777; //randomBytes(32);
+    MockChainLink.forceNextRandomNumber(nextNumber);
+    const keccak256 = BigNumber.from(soliditySha3(
+      nextNumber,
+      Table.address
+    ), 16);
+    const expectedTableDraw = keccak256.mod(37);
+  })
 })
 
 after(() => {

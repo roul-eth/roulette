@@ -80,9 +80,7 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
 
 	/**
     * Requests randomness
-    references of address 0x5FbDB2315678afecb367f032d93F642f64180aa3 for debuging only (hardhat localnode contract addr)
     */
-	//need to use modifier onlyPokeMe to allow only calls from GELATO
 	function getRandomNumber() external onlyPokeMe {
 		require(debug || block.timestamp - lastExecuted >= gelatoInterval,
 			"Time for next gelato job not elapsed"
@@ -109,6 +107,7 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
 		currentRound++;
 
 		history[currentRound] = randomness;
+
 		betsPresent = false;
 		RNGPending = false;
 

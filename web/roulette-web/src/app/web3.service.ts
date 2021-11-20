@@ -1,11 +1,12 @@
 /**by Dinesh Selvam -  PheoDScop#3470*/
-import { Injectable, OnInit } from "@angular/core";
-import { BehaviorSubject, reduce } from "rxjs";
+import { BehaviorSubject } from "rxjs";
+import { environment } from '../environments/environment';
+
 const Web3 = require('web3');
 var Contract = require('web3-eth-contract');
 
 /**
- * Import contract abi (json) from 
+ * Import contract abi (json) from
  * Casino Library, TableNFT
  * RandomNumberConsumer, RouleteeSpinCasino, RouletteTable
 */
@@ -20,7 +21,7 @@ declare let window: any;
 
 export class Web3Service {
     // web3 provider vars
-    private web3: any;
+    private readonly web3: any;
     private chainId: any;
     private networkId: any;
 
@@ -28,7 +29,6 @@ export class Web3Service {
     public accounts = []; // metamask or other accounts address
 
 
-    public CasinoLibraryInstance: any;
     public RandomNumberInstance: any;
     public RouletteSpinInstance: any;
     public RouletteTableInstance: any;
@@ -61,7 +61,7 @@ export class Web3Service {
     public accountChecker(){
         const self: this = this;
 
-        let accountCheckInterval = setInterval(function () {
+        return setInterval(function () {
             if (self.activeAccount != window.web3.currentProvider.selectedAddress) {
                 self.updateActiveAccount();
             }
@@ -74,7 +74,7 @@ export class Web3Service {
             this.activeAccount = window.web3.currentProvider.selectedAddress;
             this.accountChangeSubject.next(window.web3.currentProvider.selectedAddress);
         }else{
-            // call disconnected subject 
+            // call disconnected subject
         }
     }
 
@@ -95,7 +95,7 @@ export class Web3Service {
 
             console.log("selected add ", window.web3.currentProvider.selectedAddress);
 
-            //set up Behaviour Subject to detect changes to connected account. 
+            //set up Behaviour Subject to detect changes to connected account.
             self.accountChangeSubject.next(window.web3.currentProvider.selectedAddress);
 
             self.accountChecker();
@@ -106,18 +106,14 @@ export class Web3Service {
 
             // read contract abi
             try {
-                
-                // contracts deployed address need to be manually added to the below instance. Hook up a envVar file from where you can strip the contract address. 
-                // self.CasinoLibraryInstance = new Contract(CasinoLibrary.abi, '0x9A3F1D93e36C1A6915B170f910F377A1896C92cB');
-                // console.log("CasinoLibraryInstance: ",self.CasinoLibraryInstance);
 
-                self.RandomNumberInstance = new Contract(RandomNumberConsumer.abi, '0xf468fA5c149bb92DbCa46593f03764cdcf25FB9a');
+                self.RandomNumberInstance = new Contract(RandomNumberConsumer.abi, environment.rncInstance);
                 console.log("RandomNumberInstance: ",self.RandomNumberInstance);
 
-                self.RouletteSpinInstance = new Contract(RouletteSpinCasino.abi, '0x691FF08B4967fC3B1f928716d1cb411F23a7A298');
+                self.RouletteSpinInstance = new Contract(RouletteSpinCasino.abi, environment.casinoInstance);
                 console.log("RouletteSpinInstance: ",self.RouletteSpinInstance);
 
-                self.TableNftInstance = new Contract(TableNFT.abi, '0xfBC3a0629D7d5AC00f45D26B2A50BD3D78b8c03e');
+                self.TableNftInstance = new Contract(TableNFT.abi, environment.tableNFTInstance);
                 console.log("TableNftInstance: ",self.TableNftInstance);
 
             } catch (error) {
@@ -131,7 +127,7 @@ export class Web3Service {
     public async connectToRouletteTable(address: string) {
         const self: this = this;
 
-        try {    
+        try {
             self.RouletteTableInstance = new Contract(RouletteTable.abi, address);
             console.log("RouletteTableInstance: ",self.RouletteTableInstance);
 
@@ -146,7 +142,7 @@ export class Web3Service {
     }
 
     /**
-     * RandomNumberConsumer 
+     * RandomNumberConsumer
      */
     public subscribeToRandomNumberEvents(){
         const self: this = this;
@@ -195,14 +191,6 @@ export class Web3Service {
         const self: this = this;
         return self.RouletteSpinInstance.methods.deposit(fromPlayer, amount).send({from:this.activeAccount}).then((result: any)=>{
             // console.log("deposit from player and amount", result);
-            return result;
-        })
-    }
-
-    public fund(tableaddress: string, amount: number){
-        const self: this = this;
-        return self.RouletteSpinInstance.methods.fund(tableaddress, amount).send({from:this.activeAccount}).then((result: any)=>{
-            // console.log("fund table with amount", result);
             return result;
         })
     }

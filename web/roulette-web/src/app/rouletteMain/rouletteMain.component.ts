@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from "@angular/co
 import { Router } from '@angular/router'
 import { Web3Service } from "../web3.service";
 import { SplashScreenService } from '../splashScreen/splashscreen.service';
+import {environment} from '../../environments/environment';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class RouletteMainComponent implements OnInit {
   tokenBalance: number = 0;
   casinoTablesArray = [];
 
-  //vars 
+  //vars
   mintTableAmount: number = 0;
 
   constructor(
@@ -65,6 +66,7 @@ export class RouletteMainComponent implements OnInit {
 
   /**Web3 contract methods */
   public getAllTables(){
+    console.log(environment);
     this.web3.getTables().then((result: any)=>{
       console.log(result);
       this.casinoTablesArray = result;

@@ -1,9 +1,3 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// When running the script with `npx hardhat run <script>` you'll find the Hardhat
-// Runtime Environment's members available in the global scope.
-
 const {
   deployLibrary,
   deployRNC,
@@ -11,6 +5,9 @@ const {
   deployCasino,
   deployGelatoMock
 } = require('../utils/deployments.js');
+const fs = require('fs');
+const path = require('path');
+
 
 async function main() {
 
@@ -29,9 +26,15 @@ async function main() {
     TableNFT: TableNFT.address,
     RouletteSpinCasino: RouletteSpinCasino.address,
   });
-}
-
-module.exports = {
+  const envFile = `
+export const environment = {
+  production: false,
+  rncInstance: '${RandomNumberConsumer.address}',
+  casinoInstance: '${RouletteSpinCasino.address}',
+  tableNFTInstance: '${TableNFT.address}'
+};
+  `;
+  await fs.promises.writeFile(path.join('.', 'web', 'roulette-web', 'src', 'environments', 'environment.hardhat.ts'), envFile);
 }
 
 main()
