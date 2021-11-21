@@ -83,6 +83,13 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
         return lastExecuted;
     }
 
+     function getBetsPresent() external view returns (bool) {
+        return betsPresent;
+    }
+
+ function setLastExecuted() external {
+        lastExecuted = block.timestamp;
+    }
     /**
      * Called by gelato to execute pending actions: finish the current round, start a new round, or request
      * a random number.
@@ -101,7 +108,9 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
                 emit RandomNumberRequest(currentRound, requestId);
             } else {
                 // reverting only to signal Gelato that the task should not run
+                //should be worked out, loophole bug with bets taking long to run
                 revert("No bets present");
+                
             }
         } else {
             require(history[currentRound] != 0, "Still waiting for a RNG");

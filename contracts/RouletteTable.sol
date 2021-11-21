@@ -67,9 +67,16 @@ contract RouletteTable {
 
     function bet(CasinoLibrary.Bet[] memory bets) public {
         require(
-            ((randomNumberConsumer.getLastExecuted() + betWindow > block.timestamp) || (randomNumberConsumer.getLastExecuted() == 0)),
+            (
+                (randomNumberConsumer.getLastExecuted() + betWindow > block.timestamp) || 
+                (randomNumberConsumer.getLastExecuted() == 0) ||
+                (randomNumberConsumer.getBetsPresent())
+            
+            ),
             "Bets closed"
         );
+
+        randomNumberConsumer.setLastExecuted();
         randomNumberConsumer.setBetsPresent();
         uint256 roundId = randomNumberConsumer.getCurrentRound();
         // what was the idea to use "initilized"? It's not used anywhere

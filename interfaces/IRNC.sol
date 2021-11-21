@@ -13,5 +13,7 @@ interface IRNC {
     function setTable(address tableAddress) external;
     function getCurrentRound() external view returns (uint256);
     function getLastExecuted() external view returns (uint256);
+    function setLastExecuted() external;
+    function getBetsPresent() external view returns (bool);
 
 }
