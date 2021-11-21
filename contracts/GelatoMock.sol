@@ -17,6 +17,6 @@ contract GelatoMock {
     }
 
     function startNextRound() public {
-        randomNumberConsumer.getRandomNumber();
+        randomNumberConsumer.updateGameState();
     }
 }

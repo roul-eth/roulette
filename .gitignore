@@ -32,3 +32,10 @@ artifacts
 .gitignore
 .vscode/settings.json
 .DS_Store
+web/roulette-web/src/assets/CasinoLibrary.json
+web/roulette-web/src/assets/GelatoMock.json
+web/roulette-web/src/assets/PokeMeReady.json
+web/roulette-web/src/assets/RandomNumberConsumer.json
+web/roulette-web/src/assets/RouletteSpinCasino.json
+web/roulette-web/src/assets/RouletteTable.json
+web/roulette-web/src/assets/TableNFT.json

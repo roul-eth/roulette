@@ -2,11 +2,14 @@
 pragma solidity ^0.8.9;
 
 library CasinoLibrary {
+    uint8 constant payoutSingleNumber = 36;
+    uint8 constant payoutOther = 2;
+
     struct DrawingDetails {
         uint256 roundId;
-        uint lastExecuted;
-        uint lastReturned;
-        uint randomNumber;
+        uint256 lastExecuted;
+        uint256 lastReturned;
+        uint256 randomNumber;
     }
 
     struct RouletteBettingSlot {
@@ -27,7 +30,6 @@ library CasinoLibrary {
         uint256 betCount;
         uint256 betsAmount;
         uint256 maxPayout;
-        uint8 draw;
     }
 
     enum TableStatus {
@@ -39,11 +41,15 @@ library CasinoLibrary {
         return id <= 40;
     }
 
-    function RBSSingleNumber(uint8 number) public pure returns (RouletteBettingSlot memory rbs) {
+    function RBSSingleNumber(uint8 number)
+        public
+        pure
+        returns (RouletteBettingSlot memory rbs)
+    {
         require(number < 37, "That number will never be drawn");
         uint8[] memory numbers = new uint8[](1);
         numbers[0] = number;
-        return RouletteBettingSlot(numbers, 36);
+        return RouletteBettingSlot(numbers, payoutSingleNumber);
     }
 
     function RBSRed() public pure returns (RouletteBettingSlot memory rbs) {
@@ -66,7 +72,7 @@ library CasinoLibrary {
         numbers[15] = 32;
         numbers[16] = 34;
         numbers[17] = 36;
-        return RouletteBettingSlot(numbers, 2);
+        return RouletteBettingSlot(numbers, payoutOther);
     }
 
     function RBSBlack() public pure returns (RouletteBettingSlot memory rbs) {
@@ -89,7 +95,7 @@ library CasinoLibrary {
         numbers[15] = 31;
         numbers[16] = 33;
         numbers[17] = 35;
-        return RouletteBettingSlot(numbers, 2);
+        return RouletteBettingSlot(numbers, payoutOther);
     }
 
     function RBSOdd() public pure returns (RouletteBettingSlot memory rbs) {
@@ -112,7 +118,7 @@ library CasinoLibrary {
         numbers[15] = 31;
         numbers[16] = 33;
         numbers[17] = 35;
-        return RouletteBettingSlot(numbers, 2);
+        return RouletteBettingSlot(numbers, payoutOther);
     }
 
     function RBSEven() public pure returns (RouletteBettingSlot memory rbs) {
@@ -135,15 +141,41 @@ library CasinoLibrary {
         numbers[15] = 31;
         numbers[16] = 33;
         numbers[17] = 35;
-        return RouletteBettingSlot(numbers, 2);
+        return RouletteBettingSlot(numbers, payoutOther);
     }
 
-    function RBS(uint8 id) public pure returns (RouletteBettingSlot memory rbs) {
+    function RBS(uint8 id)
+        public
+        pure
+        returns (RouletteBettingSlot memory rbs)
+    {
         require(isValidBetId(id), "Found an invalid Betting ID");
         if (id < 37) return RBSSingleNumber(id);
         if (id == 37) return RBSRed();
         if (id == 38) return RBSBlack();
         if (id == 39) return RBSOdd();
         if (id == 40) return RBSEven();
+    }
+
+    function isWinningBet(uint8 betId, uint8 number)
+        public
+        pure
+        returns (uint8)
+    {
+        if (number == betId) return payoutSingleNumber;
+        uint8[] memory numbers;
+        if (betId == 37) {
+            numbers = RBSRed().numbers;
+        } else if (betId == 38) {
+            numbers = RBSBlack().numbers;
+        } else if (betId == 39) {
+            numbers = RBSOdd().numbers;
+        } else if (betId == 40) {
+            numbers = RBSEven().numbers;
+        }
+        for (uint8 i = 0; i < numbers.length; i++) {
+            if (numbers[i] == number) return payoutOther;
+        }
+        return 0;
     }
 }

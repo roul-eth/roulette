@@ -40,7 +40,7 @@ describe("Roulette Tables tests", () => {
 
   describe('Table status', () => {
     it("Has no bets when freshly minted", async () => {
-      expect(await Table.getBets()).to.have.lengthOf(0);
+      expect(await Table.getBets(0)).to.have.lengthOf(0);
     });
 
     it("Refuses invalid bets", async () => {
