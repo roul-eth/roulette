@@ -85,8 +85,6 @@ export class RouletteTableComponent implements OnInit {
 
     this.web3.randomNumRequest.subscribe((data:any)=>{
       console.log("randomNumRquest", data);
-      this.resultNumber = '';
-      this.wheelSpin();
     })
 
     this.web3.responceRecieved.subscribe((data:any)=>{
@@ -139,7 +137,7 @@ export class RouletteTableComponent implements OnInit {
     if (this.resultNumber !== ''){
       this.spin();
     }
-    console.log("wheel start:", this.revolutions);
+    // console.log("wheel start:", this.revolutions);
     // Blur the wheel during the animation
     this.blurWheel = true;
     // $(".wheel img").css("filter", "blur(2px)");
@@ -161,14 +159,14 @@ export class RouletteTableComponent implements OnInit {
       this.revolutions += 5000; 
     }
 
-    console.log(this.revolutions);
+    // console.log(this.revolutions);
     // Adjust by revolutions
     this.currentLength += 360 * this.revolutions;
 
     var numofsecs = this.currentLength - 360 * this.revolutions;
     // var numofsecs = 1000;
 
-    console.log("current Lengths", this.currentLength);
+    // console.log("current Lengths", this.currentLength);
 
     this.rd.setStyle(this.wheel, 'transform', `rotate(${this.currentLength}deg)`)
     // $(".wheel img").css("transform", "rotate(" + this.currentLength + "deg)");

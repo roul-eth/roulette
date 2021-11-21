@@ -197,7 +197,8 @@ export class Web3Service {
         console.log("subscribe roulette spin casino events");
         self.RouletteSpinInstance.events.winningNumberDrawn()
             .on('data', (event:any)=>{
-                console.log("Winning Number", event);
+                console.log("Winning Number", event.retunValues.winningNumber);
+                this.winningNumberSubject.next(event.retunValues.winningNumber)
             })
     }
 
