@@ -3,7 +3,7 @@
     <div class="col-lg-1">
       <button type="button" class="btn btn-secondary" (click)="back()">Back</button>
     </div>
-  </div> 
+  </div>
 
 </div>
 <div class="container-fluid">
@@ -22,9 +22,6 @@
         <div class="row">
           <div class="col">
             <label>Available Tokens: {{web3.tokenBalance - totalBets}}</label>
-            <button (click)="wheelSpin()"> Spin Wheel</button>
-            <input [(ngModel)]="resultNumber"/>
-            <button (click)="wheelSpin()"> Pass Number</button>
 
           </div>
         </div>
@@ -131,16 +128,16 @@
                 <label>Bet Size:</label>
                 <img class="" src="../../assets/rouletteCoinOne.png"
                   [ngClass]="{'selected': rouletteCoin.coinOneSelected }" (click)="rouletteCoin.coinOneSelected = !rouletteCoin.coinOneSelected">
-  
+
                 <img src="../../assets/rouletteCoinFive.png"
                   [ngClass]="{'selected': rouletteCoin.coinFiveSelected }" (click)="rouletteCoin.coinFiveSelected = !rouletteCoin.coinFiveSelected">
-  
+
                 <img src="../../assets/rouletteCoinTen.png"
                   [ngClass]="{'selected': rouletteCoin.coinTenSelected }" (click)="rouletteCoin.coinTenSelected = !rouletteCoin.coinTenSelected">
-  
+
                 <img src="../../assets/rouletteCoinTwentyFive.png"
                   [ngClass]="{'selected': rouletteCoin.coinTwentyFiveSelected }" (click)="rouletteCoin.coinTwentyFiveSelected = !rouletteCoin.coinTwentyFiveSelected">
-  
+
                 <img src="../../assets/rouletteCoinFifty.png"
                   [ngClass]="{'selected': rouletteCoin.coinFiftySelected }" (click)="rouletteCoin.coinFiftySelected = !rouletteCoin.coinFiftySelected">
 
@@ -150,7 +147,7 @@
                       <label>Current Bet: {{totalBets}}</label>
                     </div>
                   </div>
-                  
+
                 </div>
               </div>
               <div class="col-8 positions">
@@ -160,17 +157,17 @@
                 <div class="col betPositions">
                   <div class="row">
                     <ng-container *ngFor="let id of selectedPositionsfront">
-                  
+
                       <div class="col-lg-3">
                         <label class="posIds center {{getNumColor(id.betId)}}"> {{getIdLabel(id.betId)}} </label>
-                        : 
+                        :
                         <label class="betAmounts center">{{id.amount}}</label>
                       </div>
                     </ng-container>
                   </div>
                 </div>
               </div>
-              
+
             </div>
           </div>
         </div>
@@ -190,7 +187,7 @@
           <label class="eventMsgWon">You are the winner</label>
         </ng-container> -->
 
-        <ng-container> 
+        <ng-container>
           <label class="eventMsgLost">You lost your bets.</label>
         </ng-container>
 

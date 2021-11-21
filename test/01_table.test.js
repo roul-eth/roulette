@@ -60,13 +60,14 @@ describe("Roulette Tables tests", () => {
     });
 
     it("Accepts valid bets", async () => {
-      await Table.connect(signers[1]).bet([
+      const bet = await Table.connect(signers[1]).bet([
         [
           signers[1].address,
           10,
           33
         ]
-      ])
+      ]);
+      console.log({bet});
     });
 
     it("Refuses bets that make break the maxPayout", async () => {

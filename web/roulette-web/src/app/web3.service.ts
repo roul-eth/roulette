@@ -48,6 +48,9 @@ export class Web3Service {
     private randomNumResponceSubject = new BehaviorSubject<any>('');
     responceRecieved = this.randomNumResponceSubject.asObservable();
 
+    private winningNumberSubject = new BehaviorSubject<any>('');
+    winingNumRecieved = this.winningNumberSubject.asObservable();
+
     constructor(){
         if(window.ethereum === undefined){
             alert('Non-Ethereum browser detected. Install Metamask');
@@ -79,7 +82,7 @@ export class Web3Service {
 
         if(window.web3.currentProvider.selectedAddress !== null){
             this.activeAccount = window.web3.currentProvider.selectedAddress;
-            //change of account ==> update all pages and go back to main. 
+            //change of account ==> update all pages and go back to main.
             this.accountChangeSubject.next(window.web3.currentProvider.selectedAddress);
         }else{
             this.activeAccount = '';
@@ -182,7 +185,7 @@ export class Web3Service {
         .on('data', (event: any)=>{
             console.log("Responce Received", event);
             if(event.event == 'ResponseReceived'){
-                this.randomNumResponceSubject.next(true);
+                this.randomNumResponceSubject.next(event);
             }
         })
     }
@@ -194,7 +197,10 @@ export class Web3Service {
         console.log("subscribe roulette spin casino events");
         self.RouletteSpinInstance.events.winningNumberDrawn()
             .on('data', (event:any)=>{
-                console.log("Winning Number", event);
+              console.log({winningNumberDrawn: event});
+                console.log("Winning Number", event.returnValues.winningNumber);
+                this.winningNumberSubject.next(event.returnValues.winningNumber);
+                self.balanceOf();
             })
     }
 
@@ -254,7 +260,7 @@ export class Web3Service {
                     function(result: any){
                     self.tokenBalance = result;
                     }
-                )   
+                )
         }
     }
 
