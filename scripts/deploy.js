@@ -23,6 +23,7 @@ async function main() {
   console.log({
     GelatoMock: GelatoMock.address,
     RandomNumberConsumer: RandomNumberConsumer.address,
+    CasinoLibrary: CasinoLibrary.address,
     TableNFT: TableNFT.address,
     RouletteSpinCasino: RouletteSpinCasino.address,
   });
