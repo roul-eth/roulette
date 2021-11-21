@@ -31,7 +31,7 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
     event CasinoAddressChanged(address oldAddr, address newAddr);
     event RandomNumberRequest(uint256 round, bytes32 requestId);
     event ResponseReceived(uint256 round, bytes32 requestId);
-
+	
     modifier onlyCasino() {
         require(msg.sender == address(casinoAddr), "Casino calls only");
         _;
@@ -108,6 +108,9 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
             betsPresent = false;
             casinoAddr.payBets(currentRound, history[currentRound]);
             currentRound++;
+			lastExecuted = block.timestamp;
+			
+			
         }
     }
 
