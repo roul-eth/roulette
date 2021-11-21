@@ -21,7 +21,7 @@ export class RouletteMainComponent implements OnInit {
   mintTableAmount: number = 0;
 
   constructor(
-    private web3: Web3Service,
+    public web3: Web3Service,
     private splashscreen: SplashScreenService,
     private router: Router){}
 
@@ -39,6 +39,7 @@ export class RouletteMainComponent implements OnInit {
       console.log("SplashScreem stop")
       this.splashscreen.stop();
     }, 1000);
+
   }
 
   ngOnDestroy() {
@@ -75,7 +76,8 @@ export class RouletteMainComponent implements OnInit {
 
   public callPublicMint(){
     this.web3.publicMint().then((result: any)=>{
-      console.log(result);
+      
+      this.getBalanceOf();
     })
   }
 
@@ -86,9 +88,6 @@ export class RouletteMainComponent implements OnInit {
   }
 
   public getBalanceOf(){
-    this.web3.balanceOf().then((result: any)=>{
-      this.tokenBalance = result;
-      // console.log(result);
-    })
+    this.web3.balanceOf();
   }
 }
