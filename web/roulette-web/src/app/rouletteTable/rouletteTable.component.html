@@ -21,7 +21,11 @@
       <div class="roulette-table-info rtablePaddingTop">
         <div class="row">
           <div class="col">
-            <label>Available Tokens: {{web3.tokenBalance}}</label>
+            <label>Available Tokens: {{web3.tokenBalance - totalBets}}</label>
+            <button (click)="wheelSpin()"> Spin Wheel</button>
+            <input [(ngModel)]="resultNumber"/>
+            <button (click)="wheelSpin()"> Pass Number</button>
+
           </div>
         </div>
       </div>
@@ -40,7 +44,7 @@
           </div>
           <div class="col colNumPad">
             <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(9) > -1}" (click)="positionSelected(9)"> 9 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(8) > -1}" (click)="positionSelected(9)"> 8 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(8) > -1}" (click)="positionSelected(8)"> 8 </div>
             <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(7) > -1}" (click)="positionSelected(7)"> 7 </div>
           </div>
           <div class="col colNumPad">
@@ -70,8 +74,8 @@
           </div>
           <div class="col colNumPad">
             <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(27) > -1}" (click)="positionSelected(27)"> 27 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(28) > -1}" (click)="positionSelected(26)"> 26 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(29) > -1}" (click)="positionSelected(25)"> 25 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(26) > -1}" (click)="positionSelected(26)"> 26 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(25) > -1}" (click)="positionSelected(25)"> 25 </div>
           </div>
           <div class="col colNumPad">
             <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(30) > -1}" (click)="positionSelected(30)"> 30 </div>
@@ -151,11 +155,11 @@
               </div>
               <div class="col-8 positions">
                 <label>Bet Positions:</label>
-                <button type="button" class="btn btn-danger" *ngIf="this.selectedPositions.length > 0" (click)="clearBets()">Clear</button>
-                <button type="button" class="btn btn-success placeBet" *ngIf="this.selectedPositions.length > 0">Place Bets</button>
+                <button type="button" class="btn btn-danger" *ngIf="this.selectedPositionsfront.length > 0" (click)="clearBets()">Clear</button>
+                <button type="button" class="btn btn-success placeBet" *ngIf="this.selectedPositionsfront.length > 0" (click)="placeBets()">Place Bets</button>
                 <div class="col betPositions">
                   <div class="row">
-                    <ng-container *ngFor="let id of selectedPositions">
+                    <ng-container *ngFor="let id of selectedPositionsfront">
                   
                       <div class="col-lg-3">
                         <label class="posIds center {{getNumColor(id.betId)}}"> {{getIdLabel(id.betId)}} </label>
@@ -174,3 +178,23 @@
     </div>
   </div>
 </div>
+
+<ng-container *ngIf="endOfRound">
+  <div class="container-fluid overlay">
+    <div class="row justify-content-center">
+      <div class="col-2">
+        <label class="winningNum">{{resultNumber}}</label>
+      </div>
+      <div class="col-5">
+        <!-- <ng-container>
+          <label class="eventMsgWon">You are the winner</label>
+        </ng-container> -->
+
+        <ng-container> 
+          <label class="eventMsgLost">You lost your bets.</label>
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+</ng-container>

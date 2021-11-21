@@ -42,6 +42,11 @@ export class Web3Service {
     private accountChangeSubject = new BehaviorSubject<string>("");
     accountChanged = this.accountChangeSubject.asObservable();
 
+    private randomNumRequestSubject = new BehaviorSubject<any>('');
+    randomNumRequest = this.randomNumRequestSubject.asObservable();
+
+    private randomNumResponceSubject = new BehaviorSubject<any>('');
+    responceRecieved = this.randomNumResponceSubject.asObservable();
 
     constructor(){
         if(window.ethereum === undefined){
@@ -121,6 +126,13 @@ export class Web3Service {
                 self.TableNftInstance = new Contract(TableNFT.abi, environment.tableNFTInstance);
                 console.log("TableNftInstance: ",self.TableNftInstance);
 
+                self.balanceOf();
+
+                //subscribe to events
+                self.subscribeToRandomNumberEvents();
+
+                self.subscribeToRouletteSpinCasino();
+
             } catch (error) {
                 // Catch any errors for any of the above operations.
                 alert(`Failed to load web3, accounts contracts. Check console for details.`);
@@ -151,14 +163,40 @@ export class Web3Service {
      */
     public subscribeToRandomNumberEvents(){
         const self: this = this;
-        self.RandomNumberInstance.events.RandomNumberRequest({
-            topics: ['RandomNumberRequest', 'ResponseReceived']
-        }, function(error:any, event:any){
-            console.log(event)
+        console.log("subscribe randomNumber events");
+        // self.RandomNumberInstance.events.RandomNumberRequest({
+        //     topics: ['RandomNumberRequest', 'ResponseReceived']
+        // }, function(error:any, event:any){
+        //     console.log(event)
+        // })
+
+        self.RandomNumberInstance.events.RandomNumberRequest()
+        .on('data', (event: any)=>{
+            console.log("RandomNumber Request", event);
+            if(event.event == 'RandomNumberRequest'){
+                this.randomNumRequestSubject.next(true);
+            }
+        })
+
+        self.RandomNumberInstance.events.ResponseReceived()
+        .on('data', (event: any)=>{
+            console.log("Responce Received", event);
+            if(event.event == 'ResponseReceived'){
+                this.randomNumResponceSubject.next(true);
+            }
         })
     }
 
     /**RouletteSpin Casino methods */
+
+    public subscribeToRouletteSpinCasino() {
+        const self: this = this;
+        console.log("subscribe roulette spin casino events");
+        self.RouletteSpinInstance.events.winningNumberDrawn()
+            .on('data', (event:any)=>{
+                console.log("Winning Number", event);
+            })
+    }
 
     public mint(userAddress: string, amount: number){
         const self: this = this;
@@ -235,6 +273,13 @@ export class Web3Service {
     public sendBets(bets: any){
         const self:this = this;
         return self.RouletteTableInstance.methods.bet(bets).send({from: this.activeAccount}).then((data: any)=>{
+            return data;
+        })
+    }
+
+    public roundsInfo(){
+        const self: this = this;
+        return self.RouletteTableInstance.methods.roundsInfo().call().then((data: any)=>{
             return data;
         })
     }

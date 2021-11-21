@@ -1,25 +1,55 @@
 <div class="container body">
-  <div class="row userDets">
-    <div class="col">
-      <button [disabled]="!connectedToMetaMask" (click)="callPublicMint()">Public Mint</button>
-    </div>
-    <div class="col">
-      <button [disabled]="!connectedToMetaMask" (click)="getBalanceOf()">Balance Of</button>
-    </div>
-    <div class="col">
-      <span>{{web3.tokenBalance}}</span>
-    </div>
-    <div class="col">
-      <input [disabled]="!connectedToMetaMask" type="number" [(ngModel)]="mintTableAmount">
-      <button [disabled]="!connectedToMetaMask" (click)="mintTable()">Mint Table</button>
-    </div>
-    <div class="col">
-      <button [disabled]="!connectedToMetaMask" (click)="getAllTables()">Get All Tables</button>
-      <ng-container *ngFor="let add of casinoTablesArray">
-        <button type="button" class="btn btn-info" (click)="connectToTable(add)" >{{add}}</button>
+  
+  <div class="row userDets" [ngClass]="{'userDetsConnected': connectedToMetaMask}">
+    <ng-container *ngIf="!connectedToMetaMask">
+      <div class="col-lg-12 center">
+        <img src="../../assets/coin.png">
 
-      </ng-container>
-    </div>
+        <label> Welcome to <span class="red">Roul</span><span class="black">ETH</span> </label>
+      </div>
 
+    </ng-container>
+
+    <ng-container *ngIf="connectedToMetaMask">
+      <div class="col-lg-4">
+        <label class="title">User Information</label>
+        <div class="row usrInfos">
+          <div class="col-12">
+            <label class="underline">Account Address</label>: {{web3.activeAccount}}
+
+            <label class="underline">Balance</label>: {{web3.tokenBalance}}
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <label class="title">Casino Operations</label>
+        <div class="row usrInfos">
+          <label class="underline">Fund Account with Tokens:</label>
+          <button class="btn btn-secondary" [disabled]="!connectedToMetaMask" (click)="callPublicMint()">Create 500 Tokens</button>
+
+          <div></div>
+
+          <label class="underline">Create a Roulette Table</label>
+          <input [disabled]="!connectedToMetaMask" type="number" [(ngModel)]="mintTableAmount">
+          <button class="btn btn-secondary" [disabled]="!connectedToMetaMask" (click)="mintTable()">Mint Table</button>  
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <label class="title">Casino Tables</label>
+        <div class="row usrInfos">
+          <div class="col-12 center">
+            <button class="btn btn-secondary" [disabled]="!connectedToMetaMask" (click)="getAllTables()">Get All Tables</button>
+
+            <ng-container *ngFor="let add of casinoTablesArray">
+              <button type="button" class="btn btn-info" (click)="connectToTable(add)" >{{add}}</button>
+      
+            </ng-container>
+          </div>
+        </div>
+      </div>
+  
+    </ng-container>
+    
   </div>
 </div>

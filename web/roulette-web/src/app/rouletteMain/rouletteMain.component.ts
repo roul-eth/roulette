@@ -39,6 +39,7 @@ export class RouletteMainComponent implements OnInit {
       console.log("SplashScreem stop")
       this.splashscreen.stop();
     }, 1000);
+
   }
 
   ngOnDestroy() {
@@ -75,7 +76,8 @@ export class RouletteMainComponent implements OnInit {
 
   public callPublicMint(){
     this.web3.publicMint().then((result: any)=>{
-      console.log(result);
+      
+      this.getBalanceOf();
     })
   }
 

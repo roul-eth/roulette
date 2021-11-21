@@ -13,10 +13,12 @@ import { Router } from "@angular/router";
 export class RouletteTableComponent implements OnInit {
 
   wheel: any;
-  resultNumber: number = 0;
+  resultNumber: any = 5;
   tokenBalance: number = 0;
   totalBets: number = 0;
   casinoTablesArray = [];
+  availableTokens: number = 0;
+  endOfRound = false;
 
   // DOm Manipulate wheel spin
   @ViewChild('wheel')
@@ -62,6 +64,7 @@ export class RouletteTableComponent implements OnInit {
   }
 
   selectedPositions: any[] = [];
+  selectedPositionsfront: any[] = [];
   selectedbetsArray: any[] = [];
   
 
@@ -80,12 +83,22 @@ export class RouletteTableComponent implements OnInit {
       }
     });
 
+    this.web3.randomNumRequest.subscribe((data:any)=>{
+      console.log("randomNumRquest", data);
+    })
+
+    this.web3.responceRecieved.subscribe((data:any)=>{
+      console.log("randomNumRquest", data);
+    })
+
     setTimeout(()=>{
       console.log("SplashScreem stop")
       this.splashscreen.stop();
     }, 10);
 
-    this.getBalanceOf()
+    this.getBalanceOf();
+
+    this.getRoundInfo();
   }
 
   ngOnDestroy(){
@@ -103,7 +116,8 @@ export class RouletteTableComponent implements OnInit {
   }
 
   public spin() {
-    this.spin_number = this.resultNumber;
+    
+    this.spin_number = Number.parseInt(this.resultNumber);
     this.step = this.roulette_numbers.findIndex((n) => n === this.spin_number);
     console.log(
       "Rolling #",
@@ -113,8 +127,10 @@ export class RouletteTableComponent implements OnInit {
   }
 
   public wheelSpin() {
-    this.spin();
-
+    if (this.resultNumber !== ''){
+      this.spin();
+    }
+    console.log("wheel start:", this.revolutions);
     // Blur the wheel during the animation
     this.blurWheel = true;
     // $(".wheel img").css("filter", "blur(2px)");
@@ -127,12 +143,23 @@ export class RouletteTableComponent implements OnInit {
       this.revolutions++;
 
     // Add 1 or more random revolutions for animation
-    this.revolutions += this.getRandomInt(1, 3);
+    if (this.resultNumber !== ''){
+      if(this.revolutions > 5000){
+        this.revolutions = 4;
+      }
+      this.revolutions += this.getRandomInt(1, 3);
+    }else{
+      this.revolutions += 5000; 
+    }
 
+    console.log(this.revolutions);
     // Adjust by revolutions
     this.currentLength += 360 * this.revolutions;
 
     var numofsecs = this.currentLength - 360 * this.revolutions;
+    // var numofsecs = 1000;
+
+    console.log("current Lengths", this.currentLength);
 
     this.rd.setStyle(this.wheel, 'transform', `rotate(${this.currentLength}deg)`)
     // $(".wheel img").css("transform", "rotate(" + this.currentLength + "deg)");
@@ -151,6 +178,7 @@ export class RouletteTableComponent implements OnInit {
   //Bet Tables 
   public clearBets(){
     this.selectedPositions = [];
+    this.selectedPositionsfront = [];
     this.selectedbetsArray = [];
     this.totalBets = 0;
   }
@@ -181,6 +209,7 @@ export class RouletteTableComponent implements OnInit {
     // remove if found
     if(idFound){
       this.selectedPositions.splice(pos, 1);
+      this.selectedPositionsfront.splice(pos, 1);
       this.selectedbetsArray.splice(pos, 1);
     }else{
       //build the object:
@@ -190,7 +219,9 @@ export class RouletteTableComponent implements OnInit {
         betId: id
       }
       this.selectedPositions.push(obj);
+      this.selectedPositionsfront.push(obj);
       this.selectedbetsArray.push(id);
+      console.log(this.selectedPositions);
     }
     
   }
@@ -302,22 +333,17 @@ export class RouletteTableComponent implements OnInit {
   }
 
   /**Web3 contract methods */
-  public getAllTables(){
-    this.web3.getTables().then((result: any)=>{
-      console.log(result);
-      this.casinoTablesArray = result;
-    })
+  public placeBets(){
+    
+    console.log("selPOs", this.selectedPositions);
+    this.web3.sendBets(this.selectedPositions).then((data: any)=>{
+      console.log("place bets", data)
+    });
   }
 
-  public callPublicMint(){
-    this.web3.publicMint().then((result: any)=>{
-      console.log(result);
-    })
-  }
-
-  public mintTable(){
-    this.web3.mintTable(this.mintTableAmount).then((result:any)=>{
-      console.log("Mint table", result);
+  public getRoundInfo(){
+    this.web3.roundsInfo().then((data: any)=>{
+      console.log("getRoundInfo",data);
     })
   }
 
