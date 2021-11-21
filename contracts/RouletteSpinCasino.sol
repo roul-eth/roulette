@@ -21,6 +21,8 @@ contract RouletteSpinCasino is
     IRNC internal randomNumberConsumer;
     ITableNFT internal tableNFT;
 
+    event winningNumberDrawn(uint256 round, uint8 winningNumber);
+
     modifier onlyRNC() {
         require(msg.sender == address(randomNumberConsumer), "Only RNC calls");
         _;
@@ -88,6 +90,7 @@ contract RouletteSpinCasino is
 
     function payBets(uint256 _roundId, uint256 randomness) public onlyRNC {
         uint8 draw = uint8(randomness % 37);
+       
         for (uint256 i = 0; i < _tableAddresses.length; i++) {
             RouletteTable table = RouletteTable(_tableAddresses[i]);
             CasinoLibrary.Bet[] memory bets = table.getBets(_roundId);
@@ -106,5 +109,6 @@ contract RouletteSpinCasino is
                 }
             }
         }
+        emit winningNumberDrawn(_roundId, draw);
     }
 }

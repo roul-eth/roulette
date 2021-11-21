@@ -87,7 +87,39 @@ describe("Random Number Generator", () => {
     ), 16);
     const expectedTableDraw = keccak256.mod(37);
   })
+
+//red odd
+it('Winning bet paying accordingly', async () => {
+  
+  await Table.connect(signers[1]).bet([
+    [
+      signers[1].address,
+      10,
+      7
+    ],
+    [
+      signers[1].address,
+      10,
+      37
+    ],
+    [
+      signers[1].address,
+      10,
+      39
+    ]
+  ]);
+  await Promise.all([
+    GelatoMock.startNextRound(),
+    RandomNumberConsumer.mockRandomness(7),
+    GelatoMock.startNextRound()
+  ]);
+  expect(await Casino.balanceOf(signers[1].address)).to.equal(860);
+  expect(await Casino.balanceOf(Table.address)).to.equal(140);
+});
 })
+
+
+
 
 after(() => {
   MockChainLink.stop();
