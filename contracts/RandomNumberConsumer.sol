@@ -86,8 +86,9 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
     /**
      * Called by gelato to execute pending actions: finish the current round, start a new round, or request
      * a random number.
+     //NEED TO PUT OnlyPokeMe again
      */
-    function updateGameState() external onlyPokeMe {
+    function updateGameState() external {
         bytes32 requestId;
         if (!RNGPending) {
             if (betsPresent) {
