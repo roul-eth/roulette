@@ -82,7 +82,7 @@ export class Web3Service {
 
         if(window.web3.currentProvider.selectedAddress !== null){
             this.activeAccount = window.web3.currentProvider.selectedAddress;
-            //change of account ==> update all pages and go back to main. 
+            //change of account ==> update all pages and go back to main.
             this.accountChangeSubject.next(window.web3.currentProvider.selectedAddress);
         }else{
             this.activeAccount = '';
@@ -197,8 +197,10 @@ export class Web3Service {
         console.log("subscribe roulette spin casino events");
         self.RouletteSpinInstance.events.winningNumberDrawn()
             .on('data', (event:any)=>{
-                console.log("Winning Number", event.retunValues.winningNumber);
-                this.winningNumberSubject.next(event.retunValues.winningNumber)
+              console.log({winningNumberDrawn: event});
+                console.log("Winning Number", event.returnValues.winningNumber);
+                this.winningNumberSubject.next(event.returnValues.winningNumber);
+                self.balanceOf();
             })
     }
 
@@ -258,7 +260,7 @@ export class Web3Service {
                     function(result: any){
                     self.tokenBalance = result;
                     }
-                )   
+                )
         }
     }
 
