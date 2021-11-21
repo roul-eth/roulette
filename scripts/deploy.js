@@ -21,8 +21,8 @@ async function main() {
     TableNFT
   });
   console.log({
-    GelatoMock: GelatoMock.address,
     RandomNumberConsumer: RandomNumberConsumer.address,
+    GelatoMock: GelatoMock.address,
     CasinoLibrary: CasinoLibrary.address,
     TableNFT: TableNFT.address,
     RouletteSpinCasino: RouletteSpinCasino.address,
