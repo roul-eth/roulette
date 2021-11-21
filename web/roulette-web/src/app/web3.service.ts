@@ -48,6 +48,9 @@ export class Web3Service {
     private randomNumResponceSubject = new BehaviorSubject<any>('');
     responceRecieved = this.randomNumResponceSubject.asObservable();
 
+    private winningNumberSubject = new BehaviorSubject<any>('');
+    winingNumRecieved = this.winningNumberSubject.asObservable();
+
     constructor(){
         if(window.ethereum === undefined){
             alert('Non-Ethereum browser detected. Install Metamask');
@@ -182,7 +185,7 @@ export class Web3Service {
         .on('data', (event: any)=>{
             console.log("Responce Received", event);
             if(event.event == 'ResponseReceived'){
-                this.randomNumResponceSubject.next(true);
+                this.randomNumResponceSubject.next(event);
             }
         })
     }

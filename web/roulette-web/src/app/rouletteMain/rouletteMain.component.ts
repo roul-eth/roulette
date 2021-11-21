@@ -67,7 +67,7 @@ export class RouletteMainComponent implements OnInit {
 
   /**Web3 contract methods */
   public getAllTables(){
-    console.log(environment);
+    // console.log(environment);
     this.web3.getTables().then((result: any)=>{
       console.log(result);
       this.casinoTablesArray = result;

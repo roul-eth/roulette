@@ -85,10 +85,19 @@ export class RouletteTableComponent implements OnInit {
 
     this.web3.randomNumRequest.subscribe((data:any)=>{
       console.log("randomNumRquest", data);
+      this.resultNumber = '';
+      this.wheelSpin();
     })
 
     this.web3.responceRecieved.subscribe((data:any)=>{
-      console.log("randomNumRquest", data);
+      console.log("responceRecieved", data);
+      
+    })
+
+    this.web3.winingNumRecieved.subscribe((data:any)=>{
+      console.log("winingNumRecieved", data);
+      this.resultNumber = data;
+      this.wheelSpin();
     })
 
     setTimeout(()=>{
