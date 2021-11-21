@@ -16,6 +16,8 @@ contract RouletteTable {
     uint256[] drawings;
     mapping(uint256 => CasinoLibrary.Bet) public currentBets;
 
+    event BetsPlaced(uint256 amount, address from);
+
     IRNC randomNumberConsumer;
     IRouletteSpinCasino public casino;
 
@@ -66,10 +68,6 @@ contract RouletteTable {
     }
 
     function bet(CasinoLibrary.Bet[] memory bets) public {
-        require(
-            ((randomNumberConsumer.getLastExecuted() + betWindow > block.timestamp) || (randomNumberConsumer.getLastExecuted() == 0)),
-            "Bets closed"
-        );
         randomNumberConsumer.setBetsPresent();
         uint256 roundId = randomNumberConsumer.getCurrentRound();
         // what was the idea to use "initilized"? It's not used anywhere
@@ -98,5 +96,6 @@ contract RouletteTable {
         roundsHistory[roundId].betCount += bets.length;
         roundsHistory[roundId].betsAmount += total;
         roundsHistory[roundId].maxPayout += currentMaxPayout;
+        emit BetsPlaced(total, msg.sender);
     }
 }

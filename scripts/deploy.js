@@ -11,15 +11,15 @@ const path = require('path');
 
 async function main() {
 
-  const GelatoMock = await deployGelatoMock();
-  const RandomNumberConsumer = await deployRNC(GelatoMock);
-  const TableNFT = await deployNFT();
-  const CasinoLibrary = await deployLibrary();
+  const GelatoMock = await deployGelatoMock(process.env.GELATO_CONTRACT_ADDRESS);
+  const RandomNumberConsumer = await deployRNC(GelatoMock, process.env.RNC_CONTRACT_ADDRESS);
+  const TableNFT = await deployNFT(process.env.TABLE_NFT_CONTRACT_ADDRESS);
+  const CasinoLibrary = await deployLibrary(process.env.CASINO_LIBRARY_CONTRACT_ADDRESS);
   const RouletteSpinCasino = await deployCasino({
     CasinoLibrary,
     RandomNumberConsumer,
     TableNFT
-  });
+  }, process.env.ROULETTE_SPIN_CASINO_CONTRACT_ADDRESS);
   console.log({
     GelatoMock: GelatoMock.address,
     RandomNumberConsumer: RandomNumberConsumer.address,

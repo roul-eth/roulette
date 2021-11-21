@@ -132,7 +132,7 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
         fulfillRandomness(bytes32(abi.encodePacked("Random")), randomness);
     }
 
-    function setBetsPresent() public onlyTable {
+    function setBetsPresent() public {
         require(!RNGPending, "Bets are closed");
         betsPresent = true;
     }
