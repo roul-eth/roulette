@@ -3,7 +3,7 @@
     <div class="col-lg-1">
       <button type="button" class="btn btn-secondary" (click)="back()">Back</button>
     </div>
-  </div> 
+  </div>
 
 </div>
 <div class="container-fluid">
@@ -18,94 +18,102 @@
       </div>
     </div>
     <div class="col-lg-8 col-md-12 col-sm-12">
-      <div class="roulette-table rtablePaddingTop">
+      <div class="roulette-table-info rtablePaddingTop">
         <div class="row">
-          <div hoverHighlight class="col colWhiteBorder zeroColStyl"> 0 </div>
+          <div class="col">
+            <label>Available Tokens: {{web3.tokenBalance - totalBets}}</label>
+
+          </div>
+        </div>
+      </div>
+      <div class="roulette-table">
+        <div class="row">
+          <div hoverHighlight class="col colWhiteBorder zeroColStyl" (click)="positionSelected(0)"> 0 </div>
           <div class="col colWhiteBorder colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 3 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 2 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 1 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(3) > -1}" (click)="positionSelected(3)"> 3 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(2) > -1}" (click)="positionSelected(2)"> 2 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(1) > -1}" (click)="positionSelected(1)"> 1 </div>
           </div>
           <div class="col colWhiteBorder colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 6 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 5 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 4 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(6) > -1}" (click)="positionSelected(6)"> 6 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(5) > -1}" (click)="positionSelected(5)"> 5 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(4) > -1}" (click)="positionSelected(4)"> 4 </div>
           </div>
           <div class="col colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 9 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 8 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 7 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(9) > -1}" (click)="positionSelected(9)"> 9 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(8) > -1}" (click)="positionSelected(8)"> 8 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(7) > -1}" (click)="positionSelected(7)"> 7 </div>
           </div>
           <div class="col colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 12 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 11 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 10 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(12) > -1}" (click)="positionSelected(12)"> 12 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(11) > -1}" (click)="positionSelected(11)"> 11 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(10) > -1}" (click)="positionSelected(10)"> 10 </div>
           </div>
           <div class="col colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 15 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 14 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 13 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(15) > -1}" (click)="positionSelected(15)"> 15 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(14) > -1}" (click)="positionSelected(14)"> 14 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(13) > -1}" (click)="positionSelected(13)"> 13 </div>
           </div>
           <div class="col colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 18 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 17 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 16 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(18) > -1}" (click)="positionSelected(18)"> 18 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(17) > -1}" (click)="positionSelected(17)"> 17 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(16) > -1}" (click)="positionSelected(16)"> 16 </div>
           </div>
           <div class="col colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 21 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 20 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 19 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(21) > -1}" (click)="positionSelected(21)"> 21 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(20) > -1}" (click)="positionSelected(20)"> 20 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(19) > -1}" (click)="positionSelected(19)"> 19 </div>
           </div>
           <div class="col colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 24 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 23 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 22 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(24) > -1}" (click)="positionSelected(24)"> 24 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(23) > -1}" (click)="positionSelected(23)"> 23 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(22) > -1}" (click)="positionSelected(22)"> 22 </div>
           </div>
           <div class="col colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 27 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 26 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 25 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(27) > -1}" (click)="positionSelected(27)"> 27 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(26) > -1}" (click)="positionSelected(26)"> 26 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(25) > -1}" (click)="positionSelected(25)"> 25 </div>
           </div>
           <div class="col colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 30 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 29 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 28 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(30) > -1}" (click)="positionSelected(30)"> 30 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(29) > -1}" (click)="positionSelected(29)"> 29 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(28) > -1}" (click)="positionSelected(28)"> 28 </div>
           </div>
           <div class="col colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 33 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 32 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 31 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(33) > -1}" (click)="positionSelected(33)"> 33 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(32) > -1}" (click)="positionSelected(32)"> 32 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(31) > -1}" (click)="positionSelected(31)"> 31 </div>
           </div>
           <div class="col colNumPad">
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 36 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare"> 35 </div>
-            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare"> 34 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(36) > -1}" (click)="positionSelected(36)"> 36 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(35) > -1}" (click)="positionSelected(35)"> 35 </div>
+            <div hoverHighlight class="col colWhiteBorder colNumStyl redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(34) > -1}" (click)="positionSelected(34)"> 34 </div>
           </div>
           <div class="col colNumPad">
-            <div hoverHighlight class="col colWhiteBorder twoOneColStyl"> 2 to 1 </div>
-            <div hoverHighlight class="col colWhiteBorder twoOneColStyl"> 2 to 1 </div>
-            <div hoverHighlight class="col colWhiteBorder twoOneColStyl"> 2 to 1 </div>
+            <div hoverHighlight class="col colWhiteBorder twoOneColStyl" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(37) > -1}" (click)="positionSelected(37)"> 2 to 1 </div>
+            <div hoverHighlight class="col colWhiteBorder twoOneColStyl" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(38) > -1}" (click)="positionSelected(38)"> 2 to 1 </div>
+            <div hoverHighlight class="col colWhiteBorder twoOneColStyl" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(39) > -1}" (click)="positionSelected(39)"> 2 to 1 </div>
           </div>
         </div>
       </div>
       <div class="roulette-table">
         <div class="row">
           <div class="sectionColEmpty"></div>
-          <div hoverHighlight class="col colWhiteBorder sectionColFirst"> 1st 12 </div>
-          <div hoverHighlight class="col colWhiteBorder sectionColSecond"> 2nd 12 </div>
-          <div hoverHighlight class="col colWhiteBorder sectionColThird"> 3rd 12 </div>
+          <div hoverHighlight class="col colWhiteBorder sectionColFirst" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(40) > -1}" (click)="positionSelected(40)"> 1st 12 </div>
+          <div hoverHighlight class="col colWhiteBorder sectionColSecond" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(41) > -1}" (click)="positionSelected(41)"> 2nd 12 </div>
+          <div hoverHighlight class="col colWhiteBorder sectionColThird" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(42) > -1}" (click)="positionSelected(42)"> 3rd 12 </div>
           <div class="sectionColEmpty"></div>
         </div>
       </div>
       <div class="roulette-table">
         <div class="row">
           <div class="sectionColEmpty"></div>
-          <div hoverHighlight class="col colWhiteBorder lastSectionCol"> 1 to 18 </div>
-          <div hoverHighlight class="col colWhiteBorder lastSectionCol"> EVEN </div>
-          <div hoverHighlight class="col colWhiteBorder lastSectionCol redsquare"> RED </div>
-          <div hoverHighlight class="col colWhiteBorder lastSectionCol blacksquare"> BLACK </div>
-          <div hoverHighlight class="col colWhiteBorder lastSectionCol"> ODD </div>
-          <div hoverHighlight class="col colWhiteBorder lastSectionCol"> 19 to 36 </div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(43) > -1}" (click)="positionSelected(43)"> 1 to 18 </div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(44) > -1}" (click)="positionSelected(44)"> EVEN </div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol redsquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(45) > -1}" (click)="positionSelected(45)"> RED </div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol blacksquare" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(46) > -1}" (click)="positionSelected(46)"> BLACK </div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(47) > -1}" (click)="positionSelected(47)"> ODD </div>
+          <div hoverHighlight class="col colWhiteBorder lastSectionCol" [ngClass]="{'numSelected': this.selectedbetsArray.indexOf(48) > -1}" (click)="positionSelected(48)"> 19 to 36 </div>
           <div class="sectionColEmpty"></div>
         </div>
       </div>
@@ -115,21 +123,75 @@
       <div class="row justify-content-center">
         <div class="col-8 betTable">
           <div class="align-self-center betBox">
-            <div class="col-lg-3">
-              Bet Size:
-              <img src="../../assets/rouletteCoinOne.png">
+            <div class="row">
+              <div class="col-4 titles">
+                <label>Bet Size:</label>
+                <img class="" src="../../assets/rouletteCoinOne.png"
+                  [ngClass]="{'selected': rouletteCoin.coinOneSelected }" (click)="rouletteCoin.coinOneSelected = !rouletteCoin.coinOneSelected">
 
-              <img src="../../assets/rouletteCoinTen.png">
+                <img src="../../assets/rouletteCoinFive.png"
+                  [ngClass]="{'selected': rouletteCoin.coinFiveSelected }" (click)="rouletteCoin.coinFiveSelected = !rouletteCoin.coinFiveSelected">
 
-              <!-- <img src="../../assets/rouletteCoinOne.png"> -->
+                <img src="../../assets/rouletteCoinTen.png"
+                  [ngClass]="{'selected': rouletteCoin.coinTenSelected }" (click)="rouletteCoin.coinTenSelected = !rouletteCoin.coinTenSelected">
 
-              <!-- <img src="../../assets/rouletteCoinOne.png"> -->
+                <img src="../../assets/rouletteCoinTwentyFive.png"
+                  [ngClass]="{'selected': rouletteCoin.coinTwentyFiveSelected }" (click)="rouletteCoin.coinTwentyFiveSelected = !rouletteCoin.coinTwentyFiveSelected">
+
+                <img src="../../assets/rouletteCoinFifty.png"
+                  [ngClass]="{'selected': rouletteCoin.coinFiftySelected }" (click)="rouletteCoin.coinFiftySelected = !rouletteCoin.coinFiftySelected">
+
+                <div class="col-12">
+                  <div class="row">
+                    <div class="col-6 betInfo">
+                      <label>Current Bet: {{totalBets}}</label>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-8 positions">
+                <label>Bet Positions:</label>
+                <button type="button" class="btn btn-danger" *ngIf="this.selectedPositionsfront.length > 0" (click)="clearBets()">Clear</button>
+                <button type="button" class="btn btn-success placeBet" *ngIf="this.selectedPositionsfront.length > 0" (click)="placeBets()">Place Bets</button>
+                <div class="col betPositions">
+                  <div class="row">
+                    <ng-container *ngFor="let id of selectedPositionsfront">
+
+                      <div class="col-lg-3">
+                        <label class="posIds center {{getNumColor(id.betId)}}"> {{getIdLabel(id.betId)}} </label>
+                        :
+                        <label class="betAmounts center">{{id.amount}}</label>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
             </div>
-            <div class="col-lg-5"></div>
-
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<ng-container *ngIf="endOfRound">
+  <div class="container-fluid overlay">
+    <div class="row justify-content-center">
+      <div class="col-2">
+        <label class="winningNum">{{resultNumber}}</label>
+      </div>
+      <div class="col-5">
+        <!-- <ng-container>
+          <label class="eventMsgWon">You are the winner</label>
+        </ng-container> -->
+
+        <ng-container>
+          <label class="eventMsgLost">You lost your bets.</label>
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+</ng-container>

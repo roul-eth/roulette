@@ -46,7 +46,7 @@ body {
       border-top: 32px solid tomato;
       position: fixed;
       left: 33%;
-      transform: translate(31%, -29px);
+      transform: translate(50%, -29px);
       z-index: 20;
       border-radius: 0.35em;
       // top: 7%;
@@ -68,11 +68,24 @@ body {
   }
 
   .rtablePaddingTop {
-    padding-top: 10%
+    padding-top: 4%
   }
 
   .navBar {
     background-color: #1f1f22;
+  }
+
+  .roulette-table-info{
+    display: flex;
+    position: relative;
+    width: auto;
+
+    label {
+      font-size: larger;
+      color: white;
+
+    }
+
   }
 
   .roulette-table {
@@ -174,6 +187,10 @@ body {
       .hoverOver{
         background-color: #ddd;
       }
+
+      .numSelected {
+        background-color: #ddd;
+      }
     }
     
   }
@@ -187,12 +204,95 @@ body {
 
     .betBox{
       background-color: #1f1f22;
-      display: list-item;
-      height: 20vh;
+      display: block;
+      height: auto;
+      padding-left: 20px;
+      padding-top: 10px;
+
+      .titles {
+        font-size: larger;
+        color: white;
+        padding: 3px;
+      }
+
+      .positions {
+        font-size: larger;
+        color: white;
+      
+        label {
+          padding: 10px;
+        }
+        
+        .posIds {
+          width: 80px;
+          height: 30px;
+          font-size: medium;
+          border: 1px solid white;
+          padding-left: 5px;
+          padding-top: 2px;
+        }
+
+        .betAmounts {
+          width: 40px;
+          height: 30px;
+          font-size: medium;
+          padding-left: 5px;
+          padding-top: 2px;
+        }
+
+        .red {
+          background-color: red;
+        }
+        .black {
+          background-color: black;
+        }
+
+        .center {
+          text-align: center;
+        }
+
+        .betPositions {
+          padding-top: 10px;
+        }
+
+        .placeBet{
+          float: right;
+        }
+      }
 
       img {
-        height: 50px;
+        height: 56px;
       }
+
+      .selected {
+        border: 1px solid gold;
+      }
+
+      .betInfo {
+        font-size: medium;
+      }
+    }
+  }
+
+  .overlay {
+    height: 118vh;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    background-color: rgb(68 68 68 / 90%);
+
+    .winningNum {
+      font-size: 25rem;
+    }
+
+    .eventMsgWon {
+      font-size: 7rem;
+      padding-top: 20%;
+    }
+
+    .eventMsgLost {
+      font-size: 7rem;
+      padding-top: 20%;
     }
   }
   

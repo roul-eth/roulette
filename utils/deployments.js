@@ -11,7 +11,9 @@ const deployGelatoMock = async () => {
 const deployRNC = async () => {
   const RNCFactory = await hre.ethers.getContractFactory("RandomNumberConsumer");
   const _fee = hre.ethers.utils.parseEther("0.1"); // 0.1 LINK
-  const RandomNumberConsumer = await RNCFactory.deploy(
+  const RandomNumberConsumer = (address) ?
+    await RNCFactory.attach(address) :
+    await RNCFactory.deploy(
     Config.VRFCoordinator,
     Config.LINKTToken,
     Config.KeyHash,_fee,
@@ -32,15 +34,17 @@ const deployRNC = async () => {
   return RandomNumberConsumer;
 };
 
-const deployNFT = async () => {
+const deployNFT = async (address = '') => {
   const NFTFactory = await hre.ethers.getContractFactory("TableNFT");
-  const TableNFT = await NFTFactory.deploy();
+  const TableNFT = address ? await NFTFactory.attach(address) : await NFTFactory.deploy();
   return TableNFT;
 }
 
-const deployLibrary = async () => {
+const deployLibrary = async (address = '') => {
   const LibraryFactory = await hre.ethers.getContractFactory("CasinoLibrary");
-  const lib = await LibraryFactory.deploy();
+  const lib = address ?
+    await LibraryFactory.attach(address) :
+  await LibraryFactory.deploy();
 
   return lib;
 }
@@ -49,11 +53,11 @@ const deployCasino = async ({
                               CasinoLibrary,
                               RandomNumberConsumer,
                               TableNFT
-                            }) => {
+                            }, address = '') => {
   const CasinoFactory = await hre.ethers.getContractFactory("RouletteSpinCasino", {
     libraries: {CasinoLibrary: CasinoLibrary.address}
   });
-  const casino = await CasinoFactory.deploy(RandomNumberConsumer.address, TableNFT.address);
+  const casino = address ? await CasinoFactory.attach(address) : await CasinoFactory.deploy(RandomNumberConsumer.address, TableNFT.address);
 
   await RandomNumberConsumer.setCasinoAddress(casino.address);
   await TableNFT.setMinter(casino.address);
@@ -65,5 +69,6 @@ module.exports = {
   deployLibrary,
   deployRNC,
   deployNFT,
-  deployCasino
+  deployCasino,
+  deployGelatoMock
 }

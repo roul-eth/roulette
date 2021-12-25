@@ -17,7 +17,7 @@ async function main() {
     CasinoLibrary,
     RandomNumberConsumer,
     TableNFT
-  });
+  }, process.env.ROULETTE_SPIN_CASINO_CONTRACT_ADDRESS);
   console.log({
     RandomNumberConsumer: RandomNumberConsumer.address,
     CasinoLibrary: CasinoLibrary.address,

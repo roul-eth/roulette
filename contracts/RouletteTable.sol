@@ -17,6 +17,8 @@ contract RouletteTable is Ownable {
     uint256[] drawings;
     mapping(uint256 => CasinoLibrary.Bet) public currentBets;
 
+    event BetsPlaced(uint256 amount, address from);
+
     IRNC randomNumberConsumer;
     IRouletteSpinCasino public casino;
 
@@ -104,5 +106,6 @@ contract RouletteTable is Ownable {
         roundsHistory[roundId].betCount += bets.length;
         roundsHistory[roundId].betsAmount += total;
         roundsHistory[roundId].maxPayout += currentMaxPayout;
+        emit BetsPlaced(total, msg.sender);
     }
 }
