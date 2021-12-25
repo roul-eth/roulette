@@ -2,8 +2,7 @@ const {
   deployLibrary,
   deployRNC,
   deployNFT,
-  deployCasino,
-  deployGelatoMock
+  deployCasino
 } = require('../utils/deployments.js');
 const fs = require('fs');
 const path = require('path');
@@ -11,8 +10,7 @@ const path = require('path');
 
 async function main() {
 
-  const GelatoMock = await deployGelatoMock();
-  const RandomNumberConsumer = await deployRNC(GelatoMock);
+  const RandomNumberConsumer = await deployRNC();
   const TableNFT = await deployNFT();
   const CasinoLibrary = await deployLibrary();
   const RouletteSpinCasino = await deployCasino({
@@ -22,7 +20,6 @@ async function main() {
   });
   console.log({
     RandomNumberConsumer: RandomNumberConsumer.address,
-    GelatoMock: GelatoMock.address,
     CasinoLibrary: CasinoLibrary.address,
     TableNFT: TableNFT.address,
     RouletteSpinCasino: RouletteSpinCasino.address,

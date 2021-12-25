@@ -32,10 +32,10 @@ library CasinoLibrary {
         uint256 maxPayout;
     }
 
-    enum TableStatus {
+    /*enum TableStatus {
         BetsOpen,
         BetsClosed
-    }
+    }*/
 
     function isValidBetId(uint8 id) public pure returns (bool) {
         return id <= 40;

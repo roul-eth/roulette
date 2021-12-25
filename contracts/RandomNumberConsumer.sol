@@ -23,7 +23,7 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
     mapping(address => bool) private isTable;
     mapping(uint256 => uint256) private history;
 
-    bool debug;
+    bool debug = true;
 
     //temporary only, for debugging purposes
 
@@ -33,12 +33,12 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
     event ResponseReceived(uint256 round, bytes32 requestId);
 	
     modifier onlyCasino() {
-        require(msg.sender == address(casinoAddr), "Casino calls only");
+        require((msg.sender == address(casinoAddr) || msg.sender == owner()), "Casino calls only");
         _;
     }
 
     modifier onlyTable() {
-        require(isTable[msg.sender], "Table calls only");
+        require((isTable[msg.sender] || msg.sender == owner()), "Table calls only");
         _;
     }
 
@@ -50,12 +50,10 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
         address _linkToken,
         bytes32 _keyHash,
         uint256 _fee,
-        address payable _pokeMe,
-        bool _debug
+        address payable _pokeMe
     ) VRFConsumerBase(_vrfCoordinator, _linkToken) PokeMeReady(_pokeMe) {
         keyHash = _keyHash;
         fee = _fee;
-        debug = _debug;
     }
 
     /*
@@ -119,13 +117,12 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
             casinoAddr.payBets(currentRound, history[currentRound]);
             currentRound++;
 			lastExecuted = block.timestamp;
-			
-			
         }
     }
 
     /**
-     * Callback function	used by VRF Coordinator
+     * Callback function used by VRF Coordinator
+     * 
      */
     function fulfillRandomness(bytes32 requestId, uint256 randomness)
         internal
@@ -146,19 +143,26 @@ contract RandomNumberConsumer is IRNC, Ownable, VRFConsumerBase, PokeMeReady {
         betsPresent = true;
     }
 
-    function getRoundRandomness(uint256 roundId)
+    function getRoundRandomness(uint256 _roundId)
         public
         view
         onlyTable
         returns (uint256)
     {
-        return history[roundId];
+        return history[_roundId];
     }
 
     function isDebug() public view returns (bool) {
         return debug;
     }
 
+    function isRNGPending() public view onlyOwner returns (bool) {
+        return RNGPending;
+    }
+
+    function setDebug(bool _debug) public onlyOwner {
+        debug = _debug;
+    }
     /**
      * Function to allow	removing LINK from the contract
      */

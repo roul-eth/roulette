@@ -8,18 +8,15 @@ const deployGelatoMock = async () => {
   return GelatoMock;
 }
 
-const deployRNC = async (GelatoMock) => {
+const deployRNC = async () => {
   const RNCFactory = await hre.ethers.getContractFactory("RandomNumberConsumer");
   const _fee = hre.ethers.utils.parseEther("0.1"); // 0.1 LINK
   const RandomNumberConsumer = await RNCFactory.deploy(
     Config.VRFCoordinator,
     Config.LINKTToken,
     Config.KeyHash,_fee,
-    GelatoMock?.address ?? Config.PokeMe,
-    true
+    Config.PokeMe
   );
-  if (GelatoMock !== undefined)
-    await GelatoMock?.setRNC(RandomNumberConsumer.address);
   /**
    * Verify the contract on etherscan
 
@@ -66,7 +63,6 @@ const deployCasino = async ({
 
 module.exports = {
   deployLibrary,
-  deployGelatoMock,
   deployRNC,
   deployNFT,
   deployCasino

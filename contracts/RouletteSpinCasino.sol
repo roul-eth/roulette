@@ -87,6 +87,10 @@ contract RouletteSpinCasino is
         );
         _transfer(fromPlayer, msg.sender, amount);
     }
+    
+    function playerBalance() public onlyOwner returns (uint) {
+        return balanceOf(msg.sender);
+    }
 
     function payBets(uint256 _roundId, uint256 randomness) public onlyRNC {
         uint8 draw = uint8(randomness % 37);
